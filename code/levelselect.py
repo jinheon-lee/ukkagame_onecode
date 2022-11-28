@@ -59,7 +59,7 @@ class Levelselect:
                 if self.selected_level < self.maxlevel:
                     self.selected_level = 1
         if self.mousebuttondown:
-            self.create_level(self.selected_level, self.create_level)
+            self.create_level(self.selected_level)
 
     def run(self):
         self.displaybutton()
