@@ -28,6 +28,7 @@ class Level:
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
+        self.thorns = pygame.sprite.Group()
         self.checkpoints = pygame.sprite.Group()
         for row_index, row in enumerate(layout):
             for col_index, cell in enumerate(row):
@@ -43,6 +44,10 @@ class Level:
                     self.player.add(player_sprite)
                     self.startx = x
                     self.checkpoint = (x, y)
+
+                if cell == '6':
+                    sprite = Tile((x, y), tile_size, 'blue')
+                    self.thorns.add(sprite)
 
                 if cell == '5':
                     sprite = Tile((x, y), tile_size, 'yellow')
@@ -103,6 +108,11 @@ class Level:
         if checklist:
             self.checkpoint = (checklist[0].pos[0], checklist[0].pos[1])
 
+    def check_thorn(self):
+        checklist2 = pygame.sprite.spritecollide(self.player.sprite, self.thorns, False)
+        if checklist2:
+            self.kill_player()
+
     def check_death(self):
         if self.player.sprite.check_death():
             self.kill_player()
@@ -123,15 +133,19 @@ class Level:
         self.horizental_movement_collision()
         self.vertical_movement_collision()
 
-        self.check_death()
-        self.check_checkpoint()
-
         self.goal.update(self.world_shift)
         self.goal.draw(self.display_surface)
         self.check_win()
 
         self.checkpoints.update(self.world_shift)
         self.checkpoints.draw(self.display_surface)
+        self.check_checkpoint()
+
+        self.thorns.update(self.world_shift)
+        self.thorns.draw(self.display_surface)
+        self.check_thorn()
+
+        self.check_death()
 
         self.player.draw(self.display_surface)
 
