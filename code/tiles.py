@@ -15,5 +15,5 @@ class Tile(pygame.sprite.Sprite):
 
 class CheckpointTile(Tile):
     def __init__(self, pos, size):
-        super().__init__(pos, size, 'red')
-        self.pos = pos
+        super().__init__(pos, size, 'green')
+        self.pos = self.rect.center

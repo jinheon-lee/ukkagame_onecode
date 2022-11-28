@@ -99,7 +99,7 @@ class Level:
             self.create_levelselect(self.new_max_level)
 
     def check_checkpoint(self):
-        checklist = pygame.sprite.spritecollide(self.player.sprite, self.checkpoints, True)
+        checklist = pygame.sprite.spritecollide(self.player.sprite, self.checkpoints, False)
         if checklist:
             self.checkpoint = (checklist[0].pos[0], checklist[0].pos[1])
 
@@ -120,7 +120,6 @@ class Level:
         self.scroll_x()
 
         self.player.update()
-        self.player.draw(self.display_surface)
         self.horizental_movement_collision()
         self.vertical_movement_collision()
 
@@ -133,4 +132,6 @@ class Level:
 
         self.checkpoints.update(self.world_shift)
         self.checkpoints.draw(self.display_surface)
+
+        self.player.draw(self.display_surface)
 
