@@ -95,18 +95,19 @@ class Level:
             self.create_levelselect(self.new_max_level)
 
     def check_checkpoint(self):
-        if pygame.sprite.spritecollide(self.player.sprite, self.checkpoint):
-            pass
+        checklist = pygame.sprite.spritecollide(self.player.sprite, self.checkpoint)
+        if checklist:
+            self.checkpoint = self.checklist[0].pos
 
     def check_death(self):
         if self.player.sprite.check_death():
             print('사망')
             self.deathcount += 1
             self.goto_checkpoint()
-            print(self.deathcount)
+
 
     def goto_checkpoint(self):
-        pass
+        self.player.sprite.rect.midbottom = self.checkpoint
 
     def run(self):
         self.tiles.update(self.world_shift)
