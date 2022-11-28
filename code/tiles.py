@@ -15,7 +15,4 @@ class Tile(pygame.sprite.Sprite):
 class checkpointTile(Tile):
     def __init__(self, pos, size, color='grey'):
         super.__init__(self, pos, size, color='grey')
-        self.image = pygame.Surface((size, size))
-        self.image.fill(color)
-        self.rect = self.image.get_rect(topleft=pos)
         self.pos = pos
