@@ -18,6 +18,7 @@ class CheckpointTile(Tile):
         super().__init__(pos, size, 'green')
         self.pos = self.rect.center
 
+
 class ThornTile(Tile):
     def __init__(self, pos, size):
         super().__init__(pos, size, 'blue')
