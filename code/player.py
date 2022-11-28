@@ -1,6 +1,7 @@
 import pygame
 from settings import screen_height
 
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()

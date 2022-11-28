@@ -19,10 +19,14 @@ class Game:
         else:
             self.level.run()
 
-    def create_level(self, current_level):
+    def create_level(self, current_level, pos='ukka', deathcount=0):
+        self.deathcount = deathcount
         self.status = 'level'
-        self.level = Level(current_level, screen, self.create_levelselect)
-        self.deathcount = self.level.deathcount
+        self.level = Level(current_level, screen, self.create_levelselect, self.create_level)
+
+        if pos != 'ukka':
+            self.level.player.sprite.rect.center = pos
+        self.level.deathcount = self.deathcount
 
     def create_levelselect(self, new_max_level):
         if new_max_level > self.max_level:
@@ -33,7 +37,6 @@ class Game:
 
 # Pygame setup
 pygame.init()
-# screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 game = Game()
@@ -41,12 +44,17 @@ game = Game()
 while True:
     for event in pygame.event.get():
         game.levelselect.keydown = False
+        game.levelselect.mousebuttondown = False
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN:
             game.levelselect.keydown = True
-
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            game.levelselect.mousebuttondown = True
 
     screen.fill('black')
     game.run()

@@ -9,11 +9,11 @@ class Tile(pygame.sprite.Sprite):
         self.image.fill(color)
         self.rect = self.image.get_rect(topleft=pos)
 
-    def update(self, x_shift):  
+    def update(self, x_shift):
         self.rect.x += x_shift
 
 
 class CheckpointTile(Tile):
     def __init__(self, pos, size):
-        super.__init__(self, pos, size)
+        super().__init__(pos, size, 'red')
         self.pos = pos

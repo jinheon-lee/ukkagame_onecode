@@ -9,7 +9,7 @@ from game_data import levels
 
 
 class Level:
-    def __init__(self, current_level, surface, create_levelselect):
+    def __init__(self, current_level, surface, create_levelselect, create_level):
 
         # level setup
         self.current_level = current_level
@@ -21,12 +21,14 @@ class Level:
         level_data = levels[self.current_level]
         self.new_max_level = level_data['unlock']
         self.deathcount = 0
-
+        self.shifted = 0
+        self.create_level = create_level
 
     def setup_level(self, layout):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
+        self.checkpoints = pygame.sprite.Group()
         for row_index, row in enumerate(layout):
             for col_index, cell in enumerate(row):
                 x = col_index * tile_size
@@ -39,6 +41,7 @@ class Level:
                 if cell == '4':
                     player_sprite = Player((x, y))
                     self.player.add(player_sprite)
+                    self.startx = x
                     self.checkpoint = (x, y)
 
                 if cell == '5':
@@ -46,9 +49,8 @@ class Level:
                     self.goal.add(sprite)
 
                 if cell == '2':
-                    checkpoint = CheckpointTile((x, y), tile_size, 'green')
-                    self.goal.add(checkpoint)
-
+                    sprite = CheckpointTile((x, y), tile_size)
+                    self.checkpoints.add(sprite)
 
     def scroll_x(self):
         player = self.player.sprite
@@ -64,6 +66,7 @@ class Level:
         else:
             self.world_shift = 0
             player.speed = 8
+        self.shifted += self.world_shift
 
     def horizental_movement_collision(self):
         player = self.player.sprite
@@ -96,19 +99,15 @@ class Level:
             self.create_levelselect(self.new_max_level)
 
     def check_checkpoint(self):
-        checklist = pygame.sprite.spritecollide(self.player.sprite, self.checkpoint)
+        checklist = pygame.sprite.spritecollide(self.player.sprite, self.checkpoints, True)
         if checklist:
-            self.checkpoint = self.checklist[0].pos
+            self.checkpoint = (checklist[0].pos[0], checklist[0].pos[1])
 
     def check_death(self):
         if self.player.sprite.check_death():
-            print('사망')
             self.deathcount += 1
-            self.goto_checkpoint()
-
-
-    def goto_checkpoint(self):
-        self.player.sprite.rect.midbottom = self.checkpoint
+            print(self.deathcount)
+            self.create_level(self.current_level, self.checkpoint, self.deathcount)
 
     def run(self):
         self.tiles.update(self.world_shift)
@@ -117,8 +116,11 @@ class Level:
         self.player.update()
         self.horizental_movement_collision()
         self.vertical_movement_collision()
+        self.check_checkpoint()
         self.check_death()
         self.check_win()
         self.goal.update(self.world_shift)
+        self.checkpoints.update(self.world_shift)
+        self.checkpoints.draw(self.display_surface)
         self.goal.draw(self.display_surface)
         self.player.draw(self.display_surface)
