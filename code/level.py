@@ -21,7 +21,6 @@ class Level:
         level_data = levels[self.current_level]
         self.new_max_level = level_data['unlock']
         self.deathcount = 0
-        self.shifted = 0
         self.create_level = create_level
 
     def setup_level(self, layout):
@@ -42,7 +41,6 @@ class Level:
                 if cell == '4':
                     player_sprite = Player((x, y))
                     self.player.add(player_sprite)
-                    self.startx = x
                     self.checkpoint = (x, y)
 
                 if cell == '6':
@@ -71,7 +69,6 @@ class Level:
         else:
             self.world_shift = 0
             player.speed = 8
-        self.shifted += self.world_shift
 
     def horizental_movement_collision(self):
         player = self.player.sprite
