@@ -105,22 +105,32 @@ class Level:
 
     def check_death(self):
         if self.player.sprite.check_death():
-            self.deathcount += 1
-            print(self.deathcount)
-            self.create_level(self.current_level, self.checkpoint, self.deathcount)
+            self.kill_player()
+
+    def kill_player(self):
+        self.deathcount += 1
+        print(self.deathcount)
+        self.create_level(self.current_level, self.checkpoint, self.deathcount)
 
     def run(self):
+
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)
+
         self.scroll_x()
+
         self.player.update()
+        self.player.draw(self.display_surface)
         self.horizental_movement_collision()
         self.vertical_movement_collision()
-        self.check_checkpoint()
+
         self.check_death()
-        self.check_win()
+        self.check_checkpoint()
+
         self.goal.update(self.world_shift)
+        self.goal.draw(self.display_surface)
+        self.check_win()
+
         self.checkpoints.update(self.world_shift)
         self.checkpoints.draw(self.display_surface)
-        self.goal.draw(self.display_surface)
-        self.player.draw(self.display_surface)
+
