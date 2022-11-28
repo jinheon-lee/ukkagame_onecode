@@ -109,8 +109,7 @@ class Level:
             self.checkpoint = (checklist[0].pos[0], checklist[0].pos[1])
 
     def check_thorn(self):
-        checklist2 = pygame.sprite.spritecollide(self.player.sprite, self.thorns, False)
-        if checklist2:
+        if pygame.sprite.spritecollide(self.player.sprite, self.thorns, False):
             self.kill_player()
 
     def check_death(self):
@@ -124,8 +123,8 @@ class Level:
 
     def run(self):
 
-        self.tiles.update(self.world_shift)
-        self.tiles.draw(self.display_surface)
+
+
 
         self.scroll_x()
 
@@ -134,18 +133,17 @@ class Level:
         self.vertical_movement_collision()
 
         self.goal.update(self.world_shift)
-        self.goal.draw(self.display_surface)
+        self.tiles.update(self.world_shift)
+        self.checkpoints.update(self.world_shift)
+        self.thorns.update(self.world_shift)
+
+        self.check_checkpoint()
+        self.check_thorn()
+        self.check_death()
         self.check_win()
 
-        self.checkpoints.update(self.world_shift)
-        self.checkpoints.draw(self.display_surface)
-        self.check_checkpoint()
-
-        self.thorns.update(self.world_shift)
+        self.goal.draw(self.display_surface)
+        self.tiles.draw(self.display_surface)
         self.thorns.draw(self.display_surface)
-        self.check_thorn()
-
-        self.check_death()
-
+        self.checkpoints.draw(self.display_surface)
         self.player.draw(self.display_surface)
-
