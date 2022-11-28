@@ -1,7 +1,7 @@
 import sys
 
 import pygame
-from tiles import Tile
+from tiles import Tile, CheckpointTile
 from settings import tile_size, screen_width
 from player import Player
 from support import import_csv_layout
@@ -45,7 +45,7 @@ class Level:
                     self.goal.add(sprite)
 
                 if cell == '2':
-                    checkpoint = Tile((x, y), tile_size, 'green')
+                    checkpoint = CheckpointTile((x, y), tile_size, 'green')
                     self.goal.add(checkpoint)
 
 

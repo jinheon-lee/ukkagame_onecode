@@ -12,7 +12,8 @@ class Tile(pygame.sprite.Sprite):
     def update(self, x_shift):  
         self.rect.x += x_shift
 
-class checkpointTile(Tile):
-    def __init__(self, pos, size, color='grey'):
-        super.__init__(self, pos, size, color='grey')
+
+class CheckpointTile(Tile):
+    def __init__(self, pos, size):
+        super.__init__(self, pos, size)
         self.pos = pos
