@@ -21,7 +21,7 @@ class Level:
         level_data = levels[self.current_level]
         self.new_max_level = level_data['unlock']
         self.deathcount = 0
-        self.checkpoint = (0, 0)
+
 
     def setup_level(self, layout):
         self.tiles = pygame.sprite.Group()
@@ -39,6 +39,7 @@ class Level:
                 if cell == '4':
                     player_sprite = Player((x, y))
                     self.player.add(player_sprite)
+                    self.checkpoint = (x, y)
 
                 if cell == '5':
                     sprite = Tile((x, y), tile_size, 'yellow')
