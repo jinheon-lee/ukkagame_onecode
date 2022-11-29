@@ -53,15 +53,10 @@ class Levelselect:
                 if self.selected_level < self.maxlevel:
                     self.selected_level += 1
 
-        mouse_x = pygame.mouse.get_pos()[0]
-        mouse_y = pygame.mouse.get_pos()[1]
-        if levels[0]['pos'][0] - 100 <= mouse_x <= levels[0]['pos'][0] + 100:
-            if levels[0]['pos'][1] - 50 <= mouse_y <= levels[0]['pos'][1] + 50:
-                self.selected_level = 0
-        if levels[1]['pos'][0] - 100 <= mouse_x <= levels[1]['pos'][0] + 100:
-            if levels[1]['pos'][1] - 50 <= mouse_y <= levels[1]['pos'][1] + 50:
-                if self.selected_level < self.maxlevel:
-                    self.selected_level = 1
+        mousepos = pygame.mouse.get_pos()
+        for i, sprite in enumerate(self.buttons.sprites()):
+            if sprite.rect.collidepoint(mousepos):
+                self.selected_level = i
         if self.mousebuttondown:
             self.starttime = pygame.time.get_ticks()
             print("start:", self.starttime)

@@ -132,7 +132,6 @@ class Level:
             print("time:", self.time)
             print("start_time:",self.starttime)
             levels[self.current_level]['scoreboard'].append(self.time - self.starttime)
-            levels[self.current_level]['scoreboard'].sort(reverse=False)
             self.create_levelselect(self.new_max_level)
 
     def check_checkpoint(self):
