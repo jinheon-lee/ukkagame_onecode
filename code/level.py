@@ -42,6 +42,7 @@ class Level:
                     player_sprite = Player((x, y))
                     self.player.add(player_sprite)
                     self.checkpoint = (x, y)
+                    self.startx=x
 
                 if cell == '6':
                     sprite = Tile((x, y), tile_size, 'blue')
@@ -118,6 +119,12 @@ class Level:
         print(self.deathcount)
         self.create_level(self.current_level, self.checkpoint, self.deathcount)
 
+    def updatetile(self,world_shift):
+        self.goal.update(world_shift)
+        self.tiles.update(world_shift)
+        self.checkpoints.update(world_shift)
+        self.thorns.update(world_shift)
+
     def run(self):
 
 
@@ -128,12 +135,7 @@ class Level:
         self.player.update()
         self.horizental_movement_collision()
         self.vertical_movement_collision()
-
-        self.goal.update(self.world_shift)
-        self.tiles.update(self.world_shift)
-        self.checkpoints.update(self.world_shift)
-        self.thorns.update(self.world_shift)
-
+        self.updatetile(self.world_shift)
         self.check_checkpoint()
         self.check_thorn()
         self.check_death()
