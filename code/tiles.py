@@ -36,7 +36,7 @@ class AnimatedTile(Tile):
 
 class Enemy(AnimatedTile):
     def __init__(self, pos, size, imglist, speed):
-        super().__init__(pos,size,imglist)
+        super().__init__(pos, size, imglist)
         self.speed = pygame.math.Vector2(speed, 0)
         self.gravity = 0.8
 

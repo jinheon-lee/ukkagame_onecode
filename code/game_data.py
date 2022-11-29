@@ -11,7 +11,6 @@ level_1 = {
     'unlock': 1,
 }
 
-
 levels = {
     0: level_0,
     1: level_1

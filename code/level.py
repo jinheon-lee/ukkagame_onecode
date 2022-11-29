@@ -1,8 +1,8 @@
-from tiles import *
-from settings import tile_size, screen_width
-from player import Player
-from support import import_csv_layout, import_imagedict
 from game_data import levels
+from player import Player
+from settings import tile_size, screen_width
+from support import import_csv_layout, import_imagedict
+from tiles import *
 
 
 class Level:
