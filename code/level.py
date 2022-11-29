@@ -21,6 +21,7 @@ class Level:
         self.create_level = create_level
         self.alive = False
         self.counter = 120
+        self.starttime = 0
 
     def setup_level(self, layout):
         tile_img_dict = import_imagedict('../graphics/tile')
@@ -126,6 +127,12 @@ class Level:
 
     def check_win(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
+            self.time = pygame.time.get_ticks()
+            print("level", self.current_level, "time: ", self.time - self.starttime)
+            print("time:", self.time)
+            print("start_time:",self.starttime)
+            levels[self.current_level]['scoreboard'].append(self.time - self.starttime)
+            levels[self.current_level]['scoreboard'].sort(reverse=False)
             self.create_levelselect(self.new_max_level)
 
     def check_checkpoint(self):

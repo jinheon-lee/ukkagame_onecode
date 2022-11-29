@@ -2,9 +2,29 @@ import sys
 
 import pygame
 
+from game_data import levels
 from level import Level
 from levelselect import Levelselect
 from settings import *
+
+def read_scoreboard():
+    for i in range(len(levels)):
+        try:
+            with open(f'../userscore/scoreboard{i}.txt', 'r') as f:
+                lines = f.readlines()
+                for j in lines:
+                    try:
+                        score = j.strip()
+                        levels[i]['scoreboard'].append(score)
+
+                    # 스코어보드 파일이 잘못 되었을 경우 초기화
+                    except ValueError as err:
+                        levels[i]['scoreboard'] = {}
+                        break
+        # 스코어보드 파일이 존재하지 않을 경우 생성 후 초기화
+        except IOError:
+            with open(f'../userscore/scoreboard{i}.txt', 'w') as f:
+                pass
 
 
 class Game:
@@ -44,12 +64,17 @@ pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 game = Game()
+read_scoreboard()
 
 while True:
     for event in pygame.event.get():
         game.levelselect.keydown = False
         game.levelselect.mousebuttondown = False
         if event.type == pygame.QUIT:
+            for i in range(len(levels)):
+                with open(f'../userscore/scoreboard{i}.txt', 'w') as ff:
+                    for j in levels[i]['scoreboard']:
+                        ff.write(str(j) + '\n')
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN:

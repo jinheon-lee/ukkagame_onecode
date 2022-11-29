@@ -44,6 +44,7 @@ class Levelselect:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_RETURN]:
                 self.starttime = pygame.time.get_ticks()
+                print("start:", self.starttime)
                 self.create_level(self.selected_level)
             elif keys[pygame.K_UP]:
                 if self.selected_level >= 1:
@@ -63,6 +64,7 @@ class Levelselect:
                     self.selected_level = 1
         if self.mousebuttondown:
             self.starttime = pygame.time.get_ticks()
+            print("start:", self.starttime)
             self.create_level(self.selected_level)
 
     def run(self):
