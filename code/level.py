@@ -1,6 +1,3 @@
-import sys
-
-import pygame
 from tiles import *
 from settings import tile_size, screen_width
 from player import Player
@@ -39,14 +36,14 @@ class Level:
                 y = row_index * tile_size
 
                 if cell == '0':
-                    tile = Tile((x, y), tile_size,tile_img_dict['ground.png'])
+                    tile = Tile((x, y), tile_size, tile_img_dict['ground.png'])
                     self.tiles.add(tile)
 
                 if cell == '4':
                     player_sprite = Player((x, y))
                     self.player.add(player_sprite)
                     self.checkpoint = (x, y)
-                    self.startx=x
+                    self.startx = x
 
                 if cell == '6':
                     sprite = Tile((x, y), tile_size, tile_img_dict['spike.png'])
@@ -61,24 +58,24 @@ class Level:
                     self.checkpoints.add(sprite)
 
                 if cell == '1':
-                    sprite = Enemy((x,y), tile_size, tile_img_dict['enemy'],10)
+                    sprite = Enemy((x, y), tile_size, tile_img_dict['enemy'], 10)
                     self.enemys.add(sprite)
                     # TODO 여기 만들기
 
     def scroll_x(self):
-        player = self.player.sprite
-        player_x = player.rect.centerx
-        direction_x = player.direction.x
+        playerx = self.player.sprite
+        player_x = playerx.rect.centerx
+        direction_x = playerx.direction.x
 
         if player_x < screen_width / 4 and direction_x < 0:
             self.world_shift = 8
-            player.speed = 0
+            playerx.speed = 0
         elif player_x > screen_width - (screen_width / 4) and direction_x > 0:
             self.world_shift = -8
-            player.speed = 0
+            playerx.speed = 0
         else:
             self.world_shift = 0
-            player.speed = 8
+            playerx.speed = 8
 
     def horizental_movement_collision(self):
         player = self.player.sprite
@@ -127,8 +124,6 @@ class Level:
                     player.direction.y = 0
                     player.on_ceiling = True
 
-
-
     def check_win(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
             self.create_levelselect(self.new_max_level)
@@ -155,15 +150,13 @@ class Level:
     def startscreen(self):
         if self.counter >= 60:
             self.display_surface.fill('black')
-        elif self.counter>0:
+        elif self.counter > 0:
             self.display_surface.fill('grey')
-        elif self.counter<=0:
+        elif self.counter <= 0:
             self.alive = True
-        self.counter -=3
+        self.counter -= 3
 
-
-
-    def updatetile(self,world_shift):
+    def updatetile(self, world_shift):
         self.goal.update(world_shift)
         self.tiles.update(world_shift)
         self.checkpoints.update(world_shift)
@@ -187,7 +180,6 @@ class Level:
             self.thorns.draw(self.display_surface)
             self.checkpoints.draw(self.display_surface)
             self.player.draw(self.display_surface)
-            print(self.player.sprite.rect.center)
         else:
             self.startscreen()
             self.vertical_movement_collision()
