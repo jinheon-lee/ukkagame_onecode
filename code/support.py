@@ -1,5 +1,5 @@
 from csv import reader
-from os import walk
+from os import walk,listdir
 import pygame
 
 
@@ -26,11 +26,17 @@ def import_imagelist(path):
 
 def import_imagedict(path):
     imgdict = {}
-    for _, __, files in walk(path):
-        for image in files:
-            if image[-4:] == '.png':
-                full_path = path + '/' + image
-                imagefile = pygame.image.load(full_path).convert_alpha()
-                imgdict[image] = imagefile
+    for image in listdir(path):
+        if image[-4:] == '.png':
+            full_path = path + '/' + image
+            imagefile = pygame.image.load(full_path).convert_alpha()
+            imgdict[image] = imagefile
+    for __,dirs,_ in walk(path):
+        for dir  in dirs:
+            full_path = path + '/' + dir
+            li = []
+            for file in listdir(full_path):
+                li.append(file)
+            imgdict[dir]=li
 
     return imgdict

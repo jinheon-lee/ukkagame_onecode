@@ -1,7 +1,7 @@
 import sys
 
 import pygame
-from tiles import Tile, CheckpointTile
+from tiles import *
 from settings import tile_size, screen_width
 from player import Player
 from support import import_csv_layout, import_imagedict
@@ -22,6 +22,8 @@ class Level:
         self.new_max_level = level_data['unlock']
         self.deathcount = 0
         self.create_level = create_level
+        self.alive = False
+        self.counter = 120
 
     def setup_level(self, layout):
         tile_img_dict = import_imagedict('../graphics/tile')
@@ -30,6 +32,7 @@ class Level:
         self.goal = pygame.sprite.GroupSingle()
         self.thorns = pygame.sprite.Group()
         self.checkpoints = pygame.sprite.Group()
+        self.enemys = pygame.sprite.Group()
         for row_index, row in enumerate(layout):
             for col_index, cell in enumerate(row):
                 x = col_index * tile_size
@@ -57,15 +60,20 @@ class Level:
                     sprite = CheckpointTile((x, y), tile_size, tile_img_dict['checkpoint.png'])
                     self.checkpoints.add(sprite)
 
+                if cell == '1':
+                    sprite = Enemy((x,y), tile_size, tile_img_dict['enemy'],10)
+                    self.enemys.add(sprite)
+                    # TODO 여기 만들기
+
     def scroll_x(self):
         player = self.player.sprite
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
-        if player_x < screen_width / 2 and direction_x < 0:
+        if player_x < screen_width / 4 and direction_x < 0:
             self.world_shift = 8
             player.speed = 0
-        elif player_x > screen_width - (screen_width / 2) and direction_x > 0:
+        elif player_x > screen_width - (screen_width / 4) and direction_x > 0:
             self.world_shift = -8
             player.speed = 0
         else:
@@ -83,6 +91,27 @@ class Level:
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
 
+    def enemy_horizental_update(self):
+        for enemy in self.enemys.sprites():
+            enemy.rect.x += enemy.speed.x
+            for sprite in self.tiles.sprites():
+                if sprite.rect.colliderect(enemy.rect):
+                    if enemy.speed.x < 0:
+                        enemy.rect.left = sprite.rect.right
+                        enemy.speed.x *= -1
+                    elif enemy.speed.x > 0:
+                        enemy.rect.right = sprite.rect.left
+                        enemy.speed.x *= -1
+
+    def enemy_vertical_update(self):
+        for enemy in self.enemys.sprites():
+            enemy.apply_gravity()
+            for sprite in self.tiles.sprites():
+                if sprite.rect.colliderect(enemy.rect):
+                    if enemy.direction.y < 0:
+                        enemy.rect.top = sprite.rect.bottom
+                        enemy.direction.y = 0
+
     def vertical_movement_collision(self):
         player = self.player.sprite
         player.apply_gravity()
@@ -97,6 +126,8 @@ class Level:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
                     player.on_ceiling = True
+
+
 
     def check_win(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
@@ -117,8 +148,20 @@ class Level:
 
     def kill_player(self):
         self.deathcount += 1
+        self.alive = False
         print(self.deathcount)
         self.create_level(self.current_level, self.checkpoint, self.deathcount)
+
+    def startscreen(self):
+        if self.counter >= 60:
+            self.display_surface.fill('black')
+        elif self.counter>0:
+            self.display_surface.fill('grey')
+        elif self.counter<=0:
+            self.alive = True
+        self.counter -=3
+
+
 
     def updatetile(self,world_shift):
         self.goal.update(world_shift)
@@ -127,23 +170,24 @@ class Level:
         self.thorns.update(world_shift)
 
     def run(self):
+        if self.alive:
+            self.scroll_x()
+            self.player.sprite.update()
+            self.updatetile(self.world_shift)
+            self.horizental_movement_collision()
 
+            self.check_checkpoint()
+            self.check_thorn()
+            self.check_death()
+            self.check_win()
+            self.vertical_movement_collision()
 
-
-
-        self.scroll_x()
-
-        self.player.update()
-        self.horizental_movement_collision()
-        self.vertical_movement_collision()
-        self.updatetile(self.world_shift)
-        self.check_checkpoint()
-        self.check_thorn()
-        self.check_death()
-        self.check_win()
-
-        self.goal.draw(self.display_surface)
-        self.tiles.draw(self.display_surface)
-        self.thorns.draw(self.display_surface)
-        self.checkpoints.draw(self.display_surface)
-        self.player.draw(self.display_surface)
+            self.goal.draw(self.display_surface)
+            self.tiles.draw(self.display_surface)
+            self.thorns.draw(self.display_surface)
+            self.checkpoints.draw(self.display_surface)
+            self.player.draw(self.display_surface)
+            print(self.player.sprite.rect.center)
+        else:
+            self.startscreen()
+            self.vertical_movement_collision()

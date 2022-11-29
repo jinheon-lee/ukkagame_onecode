@@ -25,10 +25,9 @@ class Game:
         self.deathcount = deathcount
         self.status = 'level'
         self.level = Level(current_level, screen, self.create_levelselect, self.create_level)
-
         if pos != 'ukka':
             self.level.updatetile(-pos[0]+self.level.startx)
-            self.level.player.sprite.rect.center = (self.level.startx,pos[1])
+            self.level.player.sprite.rect.midleft = (self.level.startx, pos[1])
         self.level.deathcount = self.deathcount
 
     def create_levelselect(self, new_max_level):
