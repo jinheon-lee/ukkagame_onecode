@@ -19,7 +19,6 @@ class Game:
             self.levelselect.run()
         else:
             self.level.run()
-            print(pygame.time.get_ticks()-self.starttime)
 
     def create_level(self, current_level, pos='ukka', deathcount=0):
         self.starttime = self.levelselect.starttime
@@ -60,7 +59,7 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             game.levelselect.mousebuttondown = True
 
-    screen.fill('black')
+    screen.fill('skyblue')
     game.run()
 
     pygame.display.update()

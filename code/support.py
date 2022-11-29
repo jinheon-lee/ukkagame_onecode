@@ -12,7 +12,7 @@ def import_csv_layout(path):
         return terrain_map
 
 
-def import_image_forder(path):
+def import_imagelist(path):
     imglist = []
     for _, __, files in walk(path):
         for image in files:
@@ -22,3 +22,15 @@ def import_image_forder(path):
                 imglist.append(image)
 
     return imglist
+
+
+def import_imagedict(path):
+    imgdict = {}
+    for _, __, files in walk(path):
+        for image in files:
+            if image[-4:] == '.png':
+                full_path = path + '/' + image
+                imagefile = pygame.image.load(full_path).convert_alpha()
+                imgdict[image] = imagefile
+
+    return imgdict

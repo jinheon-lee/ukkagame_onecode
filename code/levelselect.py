@@ -1,6 +1,6 @@
 import pygame
 from game_data import levels
-from support import import_image_forder
+from support import import_imagelist
 
 
 class Levelselect:
@@ -19,7 +19,7 @@ class Levelselect:
         for i in range(self.lastlevel):
             pos = levels[i]['pos']
             imgpath = levels[i]['selectimgpath']
-            img = import_image_forder(imgpath)
+            img = import_imagelist(imgpath)
             if i <= self.maxlevel:
                 status = 'available'
             else:

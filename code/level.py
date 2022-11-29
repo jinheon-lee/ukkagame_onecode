@@ -4,7 +4,7 @@ import pygame
 from tiles import Tile, CheckpointTile
 from settings import tile_size, screen_width
 from player import Player
-from support import import_csv_layout
+from support import import_csv_layout, import_imagedict
 from game_data import levels
 
 
@@ -24,6 +24,7 @@ class Level:
         self.create_level = create_level
 
     def setup_level(self, layout):
+        tile_img_dict = import_imagedict('../graphics/tile')
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
@@ -35,7 +36,7 @@ class Level:
                 y = row_index * tile_size
 
                 if cell == '0':
-                    tile = Tile((x, y), tile_size)
+                    tile = Tile((x, y), tile_size,tile_img_dict['ground.png'])
                     self.tiles.add(tile)
 
                 if cell == '4':
@@ -45,15 +46,15 @@ class Level:
                     self.startx=x
 
                 if cell == '6':
-                    sprite = Tile((x, y), tile_size, 'blue')
+                    sprite = Tile((x, y), tile_size, tile_img_dict['spike.png'])
                     self.thorns.add(sprite)
 
                 if cell == '5':
-                    sprite = Tile((x, y), tile_size, 'yellow')
+                    sprite = Tile((x, y), tile_size, tile_img_dict['goal.png'])
                     self.goal.add(sprite)
 
                 if cell == '2':
-                    sprite = CheckpointTile((x, y), tile_size)
+                    sprite = CheckpointTile((x, y), tile_size, tile_img_dict['checkpoint.png'])
                     self.checkpoints.add(sprite)
 
     def scroll_x(self):
@@ -61,10 +62,10 @@ class Level:
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
-        if player_x < screen_width / 4 and direction_x < 0:
+        if player_x < screen_width / 2 and direction_x < 0:
             self.world_shift = 8
             player.speed = 0
-        elif player_x > screen_width - (screen_width / 4) and direction_x > 0:
+        elif player_x > screen_width - (screen_width / 2) and direction_x > 0:
             self.world_shift = -8
             player.speed = 0
         else:
