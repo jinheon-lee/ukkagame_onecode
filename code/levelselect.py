@@ -14,6 +14,7 @@ class Levelselect:
         self.keydown = False
         self.create_level = create_level
         self.mousebuttondown = False
+        self.starttime = 0
 
         for i in range(self.lastlevel):
             pos = levels[i]['pos']
@@ -41,6 +42,7 @@ class Levelselect:
         if self.keydown:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_RETURN]:
+                self.starttime = pygame.time.get_ticks()
                 self.create_level(self.selected_level)
             elif keys[pygame.K_UP]:
                 if self.selected_level >= 1:
@@ -59,6 +61,7 @@ class Levelselect:
                 if self.selected_level < self.maxlevel:
                     self.selected_level = 1
         if self.mousebuttondown:
+            self.starttime = pygame.time.get_ticks()
             self.create_level(self.selected_level)
 
     def run(self):

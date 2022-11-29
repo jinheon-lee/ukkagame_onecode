@@ -12,14 +12,17 @@ class Game:
         self.levelselect = Levelselect(self.max_level, screen, self.create_level)
         self.status = 'levelselect'
         self.deathcount = 0
+        self.starttime = 0
 
     def run(self):
         if self.status == 'levelselect':
             self.levelselect.run()
         else:
             self.level.run()
+            print(pygame.time.get_ticks()-self.starttime)
 
     def create_level(self, current_level, pos='ukka', deathcount=0):
+        self.starttime = self.levelselect.starttime
         self.deathcount = deathcount
         self.status = 'level'
         self.level = Level(current_level, screen, self.create_levelselect, self.create_level)

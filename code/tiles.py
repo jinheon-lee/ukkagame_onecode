@@ -23,3 +23,8 @@ class ThornTile(Tile):
     def __init__(self, pos, size):
         super().__init__(pos, size, 'blue')
         self.pos = self.rect.center
+
+class AnimatedTile(Tile):
+    def __init__(self):
+        super.__init__()
+        pass
