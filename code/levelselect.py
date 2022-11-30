@@ -47,6 +47,7 @@ class Levelselect:
                 self.starttime = pygame.time.get_ticks()
                 print("start:", self.starttime)
                 self.create_level(self.selected_level)
+                pygame.mouse.set_visible(False)
             elif keys[pygame.K_UP]:
                 if self.selected_level >= 1 and self.cnt <= 0:
                     self.selected_level -= 1
@@ -68,7 +69,9 @@ class Levelselect:
                 if self.mousebuttondown and i <= self.maxlevel:
                     self.starttime = pygame.time.get_ticks()
                     print("start:", self.starttime)
+                    pygame.mouse.set_visible(False)
                     self.create_level(i)
+
 
     def run(self):
         self.update()

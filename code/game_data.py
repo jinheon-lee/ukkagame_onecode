@@ -16,7 +16,7 @@ level_2 = {
     'map': '../levels/2/level_2_map.csv',
     'pos': (600, 500),
     'selectimgpath': '../graphics/levelselecter/level_2',
-    'unlock': 2,
+    'unlock': 3,
     'scoreboard': [],
 }
 

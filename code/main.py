@@ -7,7 +7,7 @@ from level import Level
 from levelselect import Levelselect
 from settings import *
 import time
-
+from ending import Ending
 
 def read_scoreboard():
     for i in range(len(levels)):
@@ -32,17 +32,23 @@ def read_scoreboard():
 class Game:
     def __init__(self):
         self.current_level = 0
-        self.max_level = 2
+        # self.max_level = 2
+        self.max_level = 0
         self.levelselect = Levelselect(self.max_level, screen, self.create_level)
         self.status = 'levelselect'
+        # self.status = 'ending'
         self.deathcount = 0
         self.starttime = 0
+        self.ending = Ending(screen,self.create_levelselect)
+
 
     def run(self):
         if self.status == 'levelselect':
             self.levelselect.run()
-        else:
+        elif self.status == 'level':
             self.level.run()
+        elif self.status == 'ending':
+            self.ending.run()
 
     def create_level(self, current_level, pos='ukka', deathcount=0):
         self.starttime = self.levelselect.starttime
@@ -55,10 +61,14 @@ class Game:
         self.level.deathcount = self.deathcount
 
     def create_levelselect(self, new_max_level):
+        if new_max_level == len(levels):
+            self.status = 'ending'
+            return
         if new_max_level > self.max_level:
             self.max_level = new_max_level
         self.levelselect = Levelselect(self.max_level, screen, self.create_level)
         self.status = 'levelselect'
+        pygame.mouse.set_visible(True)
 
 
 # Pygame setup
@@ -157,6 +167,7 @@ while True:
                 sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             game.levelselect.mousebuttondown = True
+
 
     screen.fill('skyblue')
     game.run()
