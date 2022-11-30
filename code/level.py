@@ -140,6 +140,7 @@ class Level:
 
         for sprite in self.mysteryblocks.sprites():
             if sprite.rect.colliderect(player.rect):
+                pass
 
     def check_win(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
