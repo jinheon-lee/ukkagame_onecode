@@ -9,11 +9,19 @@ level_1 = {
     'map': '../levels/1/level_1_map.csv',
     'pos': (600, 450),
     'selectimgpath': '../graphics/levelselecter/level_1',
-    'unlock': 1,
+    'unlock': 2,
+    'scoreboard': [],
+}
+level_2 = {
+    'map': '../levels/2/level_2_map.csv',
+    'pos': (600, 600),
+    'selectimgpath': '../graphics/levelselecter/level_2',
+    'unlock': 2,
     'scoreboard': [],
 }
 
 levels = {
     0: level_0,
-    1: level_1
+    1: level_1,
+    2: level_2
 }

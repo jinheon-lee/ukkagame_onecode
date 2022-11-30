@@ -49,9 +49,11 @@ class Levelselect:
             elif keys[pygame.K_UP]:
                 if self.selected_level >= 1:
                     self.selected_level -= 1
+                    pygame.time.delay(300)
             elif keys[pygame.K_DOWN]:
                 if self.selected_level < self.maxlevel:
                     self.selected_level += 1
+                    pygame.time.delay(300)
 
         mousepos = pygame.mouse.get_pos()
         for i, sprite in enumerate(self.buttons.sprites()):

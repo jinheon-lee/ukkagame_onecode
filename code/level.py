@@ -1,8 +1,12 @@
+import pygame
+
 from game_data import levels
 from player import Player
-from settings import tile_size, screen_width
+from settings import tile_size, screen_width, screen_height
 from support import import_csv_layout, import_imagedict
 from tiles import *
+pygame.font.init()
+font = pygame.font.Font('../graphics/font/big-shot.ttf', 80)
 
 
 class Level:
@@ -36,11 +40,15 @@ class Level:
                 x = col_index * tile_size
                 y = row_index * tile_size
 
-                if cell == '0':
+                if cell == '4':
                     tile = Tile((x, y), tile_size, tile_img_dict['ground.png'])
                     self.tiles.add(tile)
 
-                if cell == '4':
+                if cell == '7':
+                    tile = Tile((x, y), tile_size, tile_img_dict['topground.png'])
+                    self.tiles.add(tile)
+
+                if cell == '10':
                     player_sprite = Player((x, y))
                     self.player.add(player_sprite)
                     self.checkpoint = (x, y)
@@ -50,15 +58,15 @@ class Level:
                     sprite = Tile((x, y), tile_size, tile_img_dict['spike.png'])
                     self.thorns.add(sprite)
 
-                if cell == '5':
+                if cell == '3':
                     sprite = Tile((x, y), tile_size, tile_img_dict['goal.png'])
                     self.goal.add(sprite)
 
-                if cell == '2':
+                if cell == '0':
                     sprite = CheckpointTile((x, y), tile_size, tile_img_dict['checkpoint.png'])
                     self.checkpoints.add(sprite)
 
-                if cell == '1':
+                if cell == '12':
                     sprite = Enemy((x, y), tile_size, tile_img_dict['enemy'], 10)
                     self.enemys.add(sprite)
                     # TODO 여기 만들기
@@ -154,13 +162,21 @@ class Level:
         self.create_level(self.current_level, self.checkpoint, self.deathcount)
 
     def startscreen(self):
-        if self.counter >= 60:
+        if self.counter >= 0:
             self.display_surface.fill('black')
-        elif self.counter > 0:
-            self.display_surface.fill('grey')
         elif self.counter <= 0:
             self.alive = True
-        self.counter -= 3
+
+        text1 = font.render(f'x{3-self.deathcount}',False,'white')
+        text2 = font.render(f'Level {self.current_level+1}',False,'white')
+        text2_rect = text2.get_rect(center=(screen_width / 2, screen_height / 2-50))
+        a = self.player.sprite.image.get_rect()
+        a.topright = (screen_width/2-30,screen_height-285)
+        self.display_surface.blit(self.player.sprite.image, a)
+        self.display_surface.blit(text1, (screen_width/2-10, screen_height-300))
+        self.display_surface.blit(text2, text2_rect)
+
+        self.counter -= 1
 
     def updatetile(self, world_shift):
         self.goal.update(world_shift)
