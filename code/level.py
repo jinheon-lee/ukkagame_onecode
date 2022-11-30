@@ -136,11 +136,17 @@ class Level:
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
-                    player.on_ceiling = True
 
         for sprite in self.mysteryblocks.sprites():
             if sprite.rect.colliderect(player.rect):
-                pass
+                if player.direction.y > 0:
+                    player.rect.bottom = sprite.rect.top
+                    player.direction.y = 0
+                    player.on_ground = True
+                elif player.direction.y < 0:
+                    player.rect.top = sprite.rect.bottom
+                    player.direction.y = 0
+                    sprite.index = 1
 
     def check_win(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):

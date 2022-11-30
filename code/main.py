@@ -6,6 +6,8 @@ from game_data import levels
 from level import Level
 from levelselect import Levelselect
 from settings import *
+import time
+
 
 def read_scoreboard():
     for i in range(len(levels)):
@@ -66,6 +68,77 @@ clock = pygame.time.Clock()
 game = Game()
 read_scoreboard()
 
+# screen는 디스플레이고, 아마 니네 코드에서는 screen 이런걸로 돼있을 가능성 큼. 정의는 다음과 같이 나감
+# screen이라 돼있으면 screen --> screen으로 다 바꿔
+
+timesettrue = 0
+screen.fill((0, 0, 0))
+pygame.display.set_caption('')
+pygame.display.flip()
+
+white = (255, 255, 255)
+
+# whitescreen은 게임 화면 규격의 하얀 바탕
+# companylogo는 니네 팀 이름 있는 게임 화면 규격의 이미지
+# logo는 게임 타이틀 있는 게임 화면 규격 이미지
+# 로비는 메뉴 사진
+
+whitescreenog = pygame.image.load('../graphics/intro/whitescreen.png')
+whitescreen = pygame.transform.scale(whitescreenog, (screen_width, screen_height))
+
+companylogoog = pygame.image.load('../graphics/intro/companylogo.png')
+companylogo = pygame.transform.scale(companylogoog, (screen_width, screen_height))
+
+logoog = pygame.image.load('../graphics/intro/logo.png')
+logo = pygame.transform.scale(logoog, (screen_width, screen_height))
+
+lobbyog = pygame.image.load('../graphics/intro/lobby.png')
+lobby = pygame.transform.scale(lobbyog, (screen_width, screen_height))
+
+gamemode = 'opening'
+
+intro_over = False
+
+while not intro_over:
+    events = pygame.event.get()
+
+    for event in events:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+
+    playtime = time.time()
+    whitescreen.set_alpha(40)
+
+    # 처음 시작할 때 로고 나오기, 클릭하면 로비로 가기
+    if gamemode == 'opening':
+        if timesettrue == 0:
+            t0 = playtime
+            timesettrue = 1
+        if 0 <= playtime - t0 < 1:
+            screen.blit(whitescreen, (0, 0))
+        if 3 <= playtime - t0 < 5:
+            screen.fill(white)
+            companylogo.set_alpha(255 * (playtime - t0 - 3) / 2)
+            screen.blit(companylogo, (0, 0))
+        if 7 <= playtime - t0 < 9:
+            screen.fill(white)
+            companylogo.set_alpha(255 * (9 - playtime + t0) / 2)
+            screen.blit(companylogo, (0, 0))
+
+        if 10 <= playtime - t0 < 11:
+            screen.fill(white)
+
+        if 11 <= playtime - t0 < 13:
+            screen.fill(white)
+            logo.set_alpha(255 * (playtime - t0 - 11) / 2)
+            screen.blit(logo, (0, 0))
+
+        if 13 <= playtime - t0:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                timesettrue = 0
+                intro_over = True
+
+    pygame.display.update()
 while True:
     for event in pygame.event.get():
         game.levelselect.keydown = False
