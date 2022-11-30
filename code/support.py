@@ -36,8 +36,13 @@ def import_imagedict(path):
         for dir in dirs:
             full_path = path + '/' + dir
             li = []
-            for file in listdir(full_path):
-                li.append(file)
+            for image in listdir(full_path):
+                if image[-4:] == '.png':
+                    full_path = path + '/' + dir + '/' + image
+                    imagefile = pygame.image.load(full_path).convert_alpha()
+                    li.append(imagefile)
             imgdict[dir] = li
+
+    print(imgdict)
 
     return imgdict

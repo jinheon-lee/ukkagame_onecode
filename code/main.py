@@ -30,7 +30,7 @@ def read_scoreboard():
 class Game:
     def __init__(self):
         self.current_level = 0
-        self.max_level = 0
+        self.max_level = 2
         self.levelselect = Levelselect(self.max_level, screen, self.create_level)
         self.status = 'levelselect'
         self.deathcount = 0

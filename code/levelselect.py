@@ -16,6 +16,7 @@ class Levelselect:
         self.create_level = create_level
         self.mousebuttondown = False
         self.starttime = 0
+        self.cnt = 10
 
         for i in range(self.lastlevel):
             pos = levels[i]['pos']
@@ -47,26 +48,29 @@ class Levelselect:
                 print("start:", self.starttime)
                 self.create_level(self.selected_level)
             elif keys[pygame.K_UP]:
-                if self.selected_level >= 1:
+                if self.selected_level >= 1 and self.cnt <= 0:
                     self.selected_level -= 1
-                    pygame.time.delay(300)
+                    self.cnt = 10
+
             elif keys[pygame.K_DOWN]:
-                if self.selected_level < self.maxlevel:
+                if self.selected_level < self.maxlevel and self.cnt <= 0:
                     self.selected_level += 1
-                    pygame.time.delay(300)
+                    self.cnt = 10
+
+        if self.cnt > 0:
+            self.cnt -= 1
 
         mousepos = pygame.mouse.get_pos()
         for i, sprite in enumerate(self.buttons.sprites()):
             if sprite.rect.collidepoint(mousepos):
-                self.selected_level = i
-        if self.mousebuttondown:
-            self.starttime = pygame.time.get_ticks()
-            print("start:", self.starttime)
-            self.create_level(self.selected_level)
+                if self.mousebuttondown and i <= self.maxlevel:
+                    self.starttime = pygame.time.get_ticks()
+                    print("start:", self.starttime)
+                    self.create_level(i)
 
     def run(self):
-        self.displaybutton()
         self.update()
+        self.displaybutton()
 
     # 아래
 

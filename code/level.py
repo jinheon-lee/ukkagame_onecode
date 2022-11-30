@@ -67,7 +67,7 @@ class Level:
                     self.checkpoints.add(sprite)
 
                 if cell == '12':
-                    sprite = Enemy((x, y), tile_size, tile_img_dict['enemy'], 10)
+                    sprite = Enemy((x, y), tile_size, tile_img_dict['enemy'], -10)
                     self.enemys.add(sprite)
                     # TODO 여기 만들기
 

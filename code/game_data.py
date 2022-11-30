@@ -7,14 +7,14 @@ level_0 = {
 }
 level_1 = {
     'map': '../levels/1/level_1_map.csv',
-    'pos': (600, 450),
+    'pos': (600, 400),
     'selectimgpath': '../graphics/levelselecter/level_1',
     'unlock': 2,
     'scoreboard': [],
 }
 level_2 = {
     'map': '../levels/2/level_2_map.csv',
-    'pos': (600, 600),
+    'pos': (600, 500),
     'selectimgpath': '../graphics/levelselecter/level_2',
     'unlock': 2,
     'scoreboard': [],
