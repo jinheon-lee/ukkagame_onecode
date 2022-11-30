@@ -43,6 +43,5 @@ def import_imagedict(path):
                     li.append(imagefile)
             imgdict[dir] = li
 
-    print(imgdict)
 
     return imgdict
