@@ -24,7 +24,7 @@ class Level:
         self.deathcount = 0
         self.create_level = create_level
         self.alive = False
-        self.counter = 120
+        self.counter = 60
         self.starttime = 0
 
     def setup_level(self, layout):
@@ -35,6 +35,7 @@ class Level:
         self.thorns = pygame.sprite.Group()
         self.checkpoints = pygame.sprite.Group()
         self.enemys = pygame.sprite.Group()
+        self.mysteryblocks = pygame.sprite.Group()
         for row_index, row in enumerate(layout):
             for col_index, cell in enumerate(row):
                 x = col_index * tile_size
@@ -67,9 +68,13 @@ class Level:
                     self.checkpoints.add(sprite)
 
                 if cell == '12':
-                    sprite = Enemy((x, y), tile_size, tile_img_dict['enemy'], -10)
+                    sprite = Enemy((x, y), tile_size, tile_img_dict['enemy'], -4)
                     self.enemys.add(sprite)
                     # TODO 여기 만들기
+
+                if cell == '1234':
+                    sprite = Enemy((x,y),tile_size,tile_img_dict['mysterybox'])
+                    self.MysteryBlock.add(sprite)
 
     def scroll_x(self):
         playerx = self.player.sprite
@@ -99,23 +104,23 @@ class Level:
 
     def enemy_horizental_update(self):
         for enemy in self.enemys.sprites():
-            enemy.rect.x += enemy.speed.x
+            enemy.rect.x += enemy.direction.x
             for sprite in self.tiles.sprites():
                 if sprite.rect.colliderect(enemy.rect):
-                    if enemy.speed.x < 0:
+                    if enemy.direction.x < 0:
                         enemy.rect.left = sprite.rect.right
-                        enemy.speed.x *= -1
-                    elif enemy.speed.x > 0:
+                        enemy.direction.x *= -1
+                    elif enemy.direction.x > 0:
                         enemy.rect.right = sprite.rect.left
-                        enemy.speed.x *= -1
+                        enemy.direction.x *= -1
 
     def enemy_vertical_update(self):
         for enemy in self.enemys.sprites():
             enemy.apply_gravity()
             for sprite in self.tiles.sprites():
                 if sprite.rect.colliderect(enemy.rect):
-                    if enemy.direction.y < 0:
-                        enemy.rect.top = sprite.rect.bottom
+                    if enemy.direction.y > 0:
+                        enemy.rect.bottom = sprite.rect.top
                         enemy.direction.y = 0
 
     def vertical_movement_collision(self):
@@ -133,6 +138,9 @@ class Level:
                     player.direction.y = 0
                     player.on_ceiling = True
 
+        for sprite in self.mysteryblocks.sprites():
+            if sprite.rect.colliderect(player.rect):
+
     def check_win(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
             self.time = pygame.time.get_ticks()
@@ -147,11 +155,13 @@ class Level:
         if checklist:
             self.checkpoint = (checklist[0].pos[0], checklist[0].pos[1])
 
-    def check_thorn(self):
+    def check_die(self):
         if pygame.sprite.spritecollide(self.player.sprite, self.thorns, False):
             self.kill_player()
+        if pygame.sprite.spritecollide(self.player.sprite, self.enemys, False):
+            self.kill_player()
 
-    def check_death(self):
+    def check_fall(self):
         if self.player.sprite.check_death():
             self.kill_player()
 
@@ -183,6 +193,7 @@ class Level:
         self.tiles.update(world_shift)
         self.checkpoints.update(world_shift)
         self.thorns.update(world_shift)
+        self.enemys.update(world_shift)
 
     def run(self):
         if self.alive:
@@ -190,10 +201,12 @@ class Level:
             self.player.sprite.update()
             self.updatetile(self.world_shift)
             self.horizental_movement_collision()
+            self.enemy_horizental_update()
+            self.enemy_vertical_update()
 
             self.check_checkpoint()
-            self.check_thorn()
-            self.check_death()
+            self.check_die()
+            self.check_fall()
             self.check_win()
             self.vertical_movement_collision()
 
@@ -202,6 +215,7 @@ class Level:
             self.thorns.draw(self.display_surface)
             self.checkpoints.draw(self.display_surface)
             self.player.draw(self.display_surface)
+            self.enemys.draw(self.display_surface)
         else:
             self.startscreen()
             self.vertical_movement_collision()

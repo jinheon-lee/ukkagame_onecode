@@ -63,6 +63,8 @@ class Levelselect:
         mousepos = pygame.mouse.get_pos()
         for i, sprite in enumerate(self.buttons.sprites()):
             if sprite.rect.collidepoint(mousepos):
+                if i <= self.maxlevel:
+                    self.selected_level = i
                 if self.mousebuttondown and i <= self.maxlevel:
                     self.starttime = pygame.time.get_ticks()
                     print("start:", self.starttime)
