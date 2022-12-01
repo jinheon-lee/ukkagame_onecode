@@ -673,7 +673,7 @@ class Levelselect:  # 레벨 선택 클래스
 
         # 키보드 입력 확인
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_RETURN] or keys[pygame.K_SPACE]:
+        if keys[pygame.K_RETURN]:
             self.starttime = pygame.time.get_ticks()
             print("start:", self.starttime)
             self.create_level(self.selected_level)
