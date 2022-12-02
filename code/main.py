@@ -32,6 +32,43 @@ levels = {
     2: level_2
 }
 
+now_level = 0
+
+# 텍스트 출력 함수
+def text(arg, x, y, arg2=None, fontsize=20, fontcolor=(0, 0, 0), fontname='../graphics/font/neodgm.ttf'):
+    font = pygame.font.Font(fontname, fontsize)
+    if not arg2:
+        text_ = font.render("Score: " + str(int(arg)).zfill(6), True, fontcolor)
+    else:
+        text_ = font.render(arg2, True, fontcolor)
+    textrect = text_.get_rect()
+    textrect.centerx = x
+    textrect.centery = y
+    screen.blit(text_, textrect)
+
+def scoreboard_(now_level):
+    screen.fill('black')
+    # 스코어보드 입력
+    # 1등 기록 금색
+    text(0, 640, 260, '1: ' + str(int(levels[now_level]['scoreboard'][0])).zfill(6), 60, (255, 255, 0))
+    for i in range(1, 9):
+        # 2등 기록 은색
+        if i == 1:
+            text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                 (192, 192, 192))
+        # 3등 기록 동색
+        elif i == 2:
+            text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                 (98, 70, 55))
+        # 홀짝성에 따라 좌우 결정
+        elif i % 2 == 1:
+            text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                 (255, 255, 255))
+        else:
+            text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                 (255, 255, 255))
+    pygame.display.update()
+
 def import_csv_layout(path):
     terrain_map = []
     with open(path) as mapdata:
@@ -93,7 +130,6 @@ def read_scoreboard():
         except IOError:
             with open(f'../userscore/scoreboard{i}.txt', 'w') as f:
                 pass
-
 
 class Level:
     def __init__(self, current_level, surface, create_levelselect, create_level):
@@ -357,14 +393,15 @@ class Game:
     전체 게임 클래스
     """
 
-    def __init__(self):
+    def __init__(self, current_level):
         self.unlocked_level = 1  # 해금된 레벨(0~self.unlocked_level)
         self.levelselect = Levelselect(self.unlocked_level, screen, self.create_level)  # 레벨 선택 클래스
         self.ending = Ending(screen, self.create_levelselect)  # 엔딩 선택 장면
         self.intro = Intro(screen)  # 인트로
         self.status = 'intro'  # 게임에서 실행중인 것(인트로, 레벨선택, 레벨, 엔딩 등)
         self.deathcount = 0  # 죽은 횟수
-        self.starttime = 0  # 레벨 시작 시간
+        self.starttime = 0  # 레벨 시작
+        self.current_level = current_level
 
     def run(self):
         """
@@ -383,7 +420,7 @@ class Game:
         elif self.status == 'ending':
             self.ending.run()
         elif self.status == 'scoreboard':
-            pass
+            scoreboard_(now_level)
 
     def create_level(self, current_level, pos=None, deathcount=0):
         """
@@ -643,6 +680,7 @@ class Levelselect:  # 레벨 선택 클래스
         self.create_level = create_level  # 레벨 생성 함수
         self.starttime = 0  # 게임 시작시부터 시간을 측정하기 위한 변수
         self.cnt = 10  # 키보드 연속입력 제한을 위한 카운터
+        self.now_level = now_level
 
         for i in range(self.lastlevel):
             # 레벨 개수만큼 버튼 만들기
@@ -671,12 +709,15 @@ class Levelselect:  # 레벨 선택 클래스
     def update(self):
         """버튼 누르는 것 확인"""
 
+        global now_level
+
         # 키보드 입력 확인
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RETURN]:
             self.starttime = pygame.time.get_ticks()
             print("start:", self.starttime)
             self.create_level(self.selected_level)
+            now_level = self.selected_level
             pygame.mouse.set_visible(False)
         elif keys[pygame.K_UP]:
             if self.selected_level >= 1 and self.cnt <= 0:
@@ -696,6 +737,7 @@ class Levelselect:  # 레벨 선택 클래스
                     self.selected_level = i
                 if pygame.mouse.get_pressed()[0] and i <= self.unlocked_level and self.cnt <= 0:
                     self.starttime = pygame.time.get_ticks()
+                    now_level = self.selected_level
                     print("start:", self.starttime)
                     pygame.mouse.set_visible(False)
                     self.create_level(i)
@@ -793,7 +835,7 @@ screen_height = vertical_tile_number * tile_size
 screen_width = 1200
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
-game = Game()
+game = Game(now_level)
 read_scoreboard()
 pygame.display.set_caption('ukkagame')  # 게임 창 이름
 pygame.display.flip()
@@ -817,9 +859,13 @@ while True:
                 else:
                     pygame.quit()
                     sys.exit()
+            if event.key == pygame.K_s:
+                scoreboard_(now_level)
+                game.status = 'scoreboard'
+            if event.key == pygame.K_m:
+                game.status = 'levelselect'
     screen.fill('skyblue')
     game.run()  # 게임 실행
 
     pygame.display.update()
     clock.tick(60)
-
