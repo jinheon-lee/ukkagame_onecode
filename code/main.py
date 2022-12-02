@@ -50,28 +50,44 @@ def scoreboard_(now_level):
     screen.fill('black')
     # 스코어보드 입력
     # 1등 기록 금색
-    text(0, 640, 260, '1: ' + str(int(levels[now_level]['scoreboard'][0])).zfill(6), 60, (255, 255, 0))
+    text(0, 640, 100, f"LEVEL {now_level+1}", 100, (255, 255, 255))
+    try:
+        text(0, 640, 260, f'1: ' + levels[now_level]['scoreboard'][0].zfill(6), 60, (255, 255, 0))
+    except:
+        text(0, 640, 260, '1: ' + "0".zfill(6), 60, (255, 255, 0))
     for i in range(1, 9):
         try:
             # 2등 기록 은색
             if i == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i+1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
                      (192, 192, 192))
             # 3등 기록 동색
             elif i == 2:
-                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i+1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
                      (98, 70, 55))
             # 홀짝성에 따라 좌우 결정
             elif i % 2 == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i+1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
                      (255, 255, 255))
             else:
-                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i+1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
                      (255, 255, 255))
         except:
-            pass
+            if i == 1:
+                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(6), 40,
+                     (192, 192, 192))
+            # 3등 기록 동색
+            elif i == 2:
+                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(6), 40,
+                     (98, 70, 55))
+            # 홀짝성에 따라 좌우 결정
+            elif i % 2 == 1:
+                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(6), 40,
+                     (255, 255, 255))
+            else:
+                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(6), 40,
+                     (255, 255, 255))
     pygame.display.update()
-
 def import_csv_layout(path):
     terrain_map = []
     with open(path) as mapdata:
@@ -694,7 +710,7 @@ class Levelselect:  # 레벨 선택 클래스
                 status = 'available'
             else:
                 status = 'locked'
-            self.buttons.add(Button(pos, status, img))
+            self.buttons.add(LevelselectButton(pos, status, img))
 
     def displaybutton(self):
         """버튼 상태를 지정하고 버튼 그리기"""
@@ -758,7 +774,7 @@ class Levelselect:  # 레벨 선택 클래스
     # 아래
 
 
-class Button(pygame.sprite.Sprite):
+class LevelselectButton(pygame.sprite.Sprite):
     def __init__(self, pos, status, imglist):
         super().__init__()
         self.imglist = imglist  # [선택 X 이미지, 선택 이미지, 잠김 이미지]
