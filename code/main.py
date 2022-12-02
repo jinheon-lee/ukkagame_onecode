@@ -52,21 +52,24 @@ def scoreboard_(now_level):
     # 1등 기록 금색
     text(0, 640, 260, '1: ' + str(int(levels[now_level]['scoreboard'][0])).zfill(6), 60, (255, 255, 0))
     for i in range(1, 9):
-        # 2등 기록 은색
-        if i == 1:
-            text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
-                 (192, 192, 192))
-        # 3등 기록 동색
-        elif i == 2:
-            text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
-                 (98, 70, 55))
-        # 홀짝성에 따라 좌우 결정
-        elif i % 2 == 1:
-            text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
-                 (255, 255, 255))
-        else:
-            text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
-                 (255, 255, 255))
+        try:
+            # 2등 기록 은색
+            if i == 1:
+                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                     (192, 192, 192))
+            # 3등 기록 동색
+            elif i == 2:
+                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                     (98, 70, 55))
+            # 홀짝성에 따라 좌우 결정
+            elif i % 2 == 1:
+                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                     (255, 255, 255))
+            else:
+                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + str(int(levels[now_level]['scoreboard'][i])).zfill(6), 40,
+                     (255, 255, 255))
+        except:
+            pass
     pygame.display.update()
 
 def import_csv_layout(path):
@@ -859,7 +862,7 @@ while True:
                 else:
                     pygame.quit()
                     sys.exit()
-            if event.key == pygame.K_s:
+            if event.key == pygame.K_s and game.status == 'levelselect':
                 scoreboard_(now_level)
                 game.status = 'scoreboard'
             if event.key == pygame.K_m:
