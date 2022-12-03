@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fbf8680e-4ca0-4a29-b426-cda2cc780143" name="변경" comment="레벨 추가 그외 많은거">
+    <list default="true" id="fbf8680e-4ca0-4a29-b426-cda2cc780143" name="변경" comment="스코어보드 버그">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ukkagame_통합.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ukkagame_통합.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/userscore/scoreboard0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/userscore/scoreboard0.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userscore/scoreboard1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/userscore/scoreboard1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userscore/scoreboard2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/userscore/scoreboard2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userscore/scoreboard3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/userscore/scoreboard3.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,13 +28,14 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ukkagame_통합" />
@@ -116,7 +122,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670080367778</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="스코어보드 버그">
+      <created>1670082272761</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1670082272761</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -136,7 +149,8 @@
     <MESSAGE value="스코어보드 잔버그 해결" />
     <MESSAGE value="스코어보드 관련" />
     <MESSAGE value="레벨 추가 그외 많은거" />
-    <option name="LAST_COMMIT_MESSAGE" value="레벨 추가 그외 많은거" />
+    <MESSAGE value="스코어보드 버그" />
+    <option name="LAST_COMMIT_MESSAGE" value="스코어보드 버그" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

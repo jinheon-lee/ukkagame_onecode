@@ -1,8 +1,10 @@
 import pygame
 import sys
-from csv import reader
-from os import walk, listdir
+import csv
+
+import os
 import time
+import pygame_textinput
 
 level_0 = {
     'map': '../levels/0/level_0_map.csv',
@@ -47,41 +49,11 @@ levels = {
 now_level = 0
 
 
-class InputBox:
-    # 텍스트 입력 클래스
-    def __init__(self, x, y, w, h, text=''):
-        self.font = pygame.font.Font('../graphics/font/neodgm.ttf', 40)
-        self.rect = pygame.Rect(x, y, w, h)
-        self.color = pygame.Color('lightskyblue3')
-        self.text = text
-        self.txt_surface = self.font.render(text, True, self.color)
-        self.active = False
-
-    def handle_event(self, event):
-        if event.type == pygame.KEYDOWN:
-            if self.active:
-                if event.key == pygame.K_RETURN:
-                    return self.text
-                elif event.key == pygame.K_BACKSPACE:
-                    self.text = self.text[:-1]
-                else:
-                    self.text += event.unicode
-                self.txt_surface = self.render(self.text, True, self.color)
-
-    # def update(self):
-    #     width = max(200, self.txt_surface.get_width()+10)
-    #     self.rect.w = width
-
-    def draw(self, display_surface):
-        display_surface.blit(self.txt_surface, (self.rect.x + 5, self.rect.y + 5))
-        pygame.draw.rect(display_surface, self.color, self.rect, 2)
-
-
 # 텍스트 출력 함수
 def text(arg, x, y, arg2=None, fontsize=20, fontcolor=(0, 0, 0), fontname='../graphics/font/neodgm.ttf'):
     font = pygame.font.Font(fontname, fontsize)
     if not arg2:
-        text_ = font.render("Score: " + str(int(arg)).zfill(6), True, fontcolor)
+        text_ = font.render("Score: " + str(int(arg)).zfill(12), True, fontcolor)
     else:
         text_ = font.render(arg2, True, fontcolor)
     textrect = text_.get_rect()
@@ -92,45 +64,50 @@ def text(arg, x, y, arg2=None, fontsize=20, fontcolor=(0, 0, 0), fontname='../gr
 
 def scoreboard_(now_level):
     screen.fill('black')
-    print(levels[now_level]['scoreboard'])
     # 스코어보드 입력
     # 1등 기록 금색
     text(0, 640, 100, f"LEVEL {now_level + 1}", 100, (255, 255, 255))
     try:
-        text(0, 640, 260, f'1: ' + str(levels[now_level]['scoreboard'][0]).zfill(6), 60, (255, 255, 0))
+        text(0, 640, 260, f'1: ' + str(levels[now_level]['scoreboard'][0]).zfill(12), 60, (255, 255, 0))
+
     except:
-        text(0, 640, 260, '1: ' + "0".zfill(6), 60, (255, 255, 0))
+        text(0, 640, 260, '1: ' + "0".zfill(12), 60, (255, 255, 0))
+
     for i in range(1, 9):
         try:
             # 2등 기록 은색
             if i == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(6), 40,
+                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(12),
+                     40,
                      (192, 192, 192))
             # 3등 기록 동색
             elif i == 2:
-                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(6), 40,
+                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(12),
+                     40,
                      (98, 70, 55))
             # 홀짝성에 따라 좌우 결정
             elif i % 2 == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(6), 40,
+                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(12),
+                     40,
                      (255, 255, 255))
             else:
-                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(6), 40,
+                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(12),
+                     40,
                      (255, 255, 255))
         except:
             if i == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(6), 40,
+                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(12), 40,
                      (192, 192, 192))
             # 3등 기록 동색
             elif i == 2:
-                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(6), 40,
+                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(12), 40,
                      (98, 70, 55))
             # 홀짝성에 따라 좌우 결정
             elif i % 2 == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(6), 40,
+                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(12), 40,
                      (255, 255, 255))
             else:
-                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(6), 40,
+                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(12), 40,
                      (255, 255, 255))
     pygame.display.update()
 
@@ -138,7 +115,7 @@ def scoreboard_(now_level):
 def import_csv_layout(path):
     terrain_map = []
     with open(path) as mapdata:
-        level = reader(mapdata)
+        level = csv.reader(mapdata)
         for row in level:
             terrain_map.append(list(row))
         return terrain_map
@@ -146,7 +123,7 @@ def import_csv_layout(path):
 
 def import_imagelist(path):
     imglist = []
-    for _, __, files in walk(path):
+    for _, __, files in os.walk(path):
         for image in files:
             if image[-4:] == '.png':
                 full_path = path + '/' + image
@@ -158,16 +135,16 @@ def import_imagelist(path):
 
 def import_imagedict(path):
     imgdict = {}
-    for image in listdir(path):
+    for image in os.listdir(path):
         if image[-4:] == '.png':
             full_path = path + '/' + image
             imagefile = pygame.image.load(full_path).convert_alpha()
             imgdict[image] = imagefile
-    for __, dirs, _ in walk(path):
+    for __, dirs, _ in os.walk(path):
         for dir in dirs:
             full_path = path + '/' + dir
             li = []
-            for image in listdir(full_path):
+            for image in os.listdir(full_path):
                 if image[-4:] == '.png':
                     full_path = path + '/' + dir + '/' + image
                     imagefile = pygame.image.load(full_path).convert_alpha()
@@ -175,6 +152,18 @@ def import_imagedict(path):
             imgdict[dir] = li
 
     return imgdict
+
+
+class Score:
+    def __init__(self, name: str, score: int):
+        self.name = name
+        self.score = score
+
+    def __lt__(self, other):
+        self.score < other.score
+
+    def __str__(self):
+        return f'{str(self.score).zfill(12)} {self.name}'
 
 
 def read_scoreboard():
@@ -185,16 +174,16 @@ def read_scoreboard():
                 lines = f.readlines()
                 for j in lines:
                     try:
-                        score = j.strip()
-                        levels[i]['scoreboard'].append(int(score))
+                        name, score = j.strip().split()
+                        levels[i]['scoreboard'].append(Score(name, int(score)))
 
                     # 스코어보드 파일이 잘못 되었을 경우 초기화
-                    except ValueError as err:
-                        levels[i]['scoreboard'] = {}
+                    except ValueError:
+                        levels[i]['scoreboard'] = []
                         break
         # 스코어보드 파일이 존재하지 않을 경우 생성 후 초기화
         except IOError:
-            with open(f'../userscore/scoreboard{i}.txt', 'w') as f:
+            with open(f'../userscore/scoreboard{i}.txt', 'w'):
                 pass
 
 
@@ -399,7 +388,7 @@ class Level:
             # print("level", self.current_level, "time: ", self.time - self.starttime)
             # print("time:", self.time)
             # print("start_time:", self.starttime)
-            levels[self.current_level]['scoreboard'].append((self.time - self.starttime)//100)
+            levels[self.current_level]['scoreboard'].append(Score(username, (self.time - self.starttime) // 10))
             if levels[self.current_level]['death'] > self.deathcount:
                 levels[self.current_level]['death'] = self.deathcount
                 # print(levels[self.current_level]['death'])
@@ -512,7 +501,6 @@ class Game:
         self.starttime = 0  # 레벨 시작
         self.current_level = current_level
 
-
     def run(self):
         """
         self.status 따라 장면 실행
@@ -521,7 +509,7 @@ class Game:
         """
         if self.status == 'intro':
             self.intro.run()
-            if self.intro.intro_over:
+            if self.intro.intro_status == 3:
                 self.status = 'levelselect'
         elif self.status == 'levelselect':
             self.levelselect.run()
@@ -531,7 +519,6 @@ class Game:
             self.ending.run()
         elif self.status == 'scoreboard':
             scoreboard_(now_level)
-
 
     def create_level(self, current_level, pos=None, deathcount=0):
         """
@@ -547,7 +534,7 @@ class Game:
         self.deathcount = deathcount
         self.status = 'level'
         self.level = Level(current_level, screen, self.create_levelselect, self.create_level)
-        if pos != None:  # pos가 주어졌다면 플레이어의 위치를 새롭게 지정, 체크포인트에 사용
+        if pos is not None:  # pos가 주어졌다면 플레이어의 위치를 새롭게 지정, 체크포인트에 사용
             '''
             여기서 self.level.startx는 레벨에 들어왔을 때 플레이어가 스폰되는 x좌표
             pos를 받은 경우 체크포인트가 보이는 위치의 x좌표가 이 startx가 되게 화면을 이동
@@ -559,7 +546,7 @@ class Game:
         self.level.deathcount = self.deathcount
 
     def create_levelselect(self, new_unlocked_level):
-        game.ending.__init__(screen,self.create_levelselect)
+        game.ending.__init__(screen, self.create_levelselect)
         """
         레벨 셀렉트 클래스 만듦
 
@@ -597,7 +584,7 @@ class Intro:
         self.lobby = pygame.transform.scale(lobbyog, (screen_width, screen_height))
 
         self.screen = display_surface
-        self.intro_over = False
+        self.intro_status = 0
         self.screen.fill('white')
         self.timesettrue = 0
 
@@ -612,7 +599,6 @@ class Intro:
             self.timesettrue = 1
         if 0 <= self.playtime - self.t0 < 1:
             self.screen.fill('white')
-            self.screen.blit(self.whitescreen, (0, 0))
 
         if 1 <= self.playtime - self.t0 < 2:
             self.screen.fill('white')
@@ -626,9 +612,18 @@ class Intro:
             self.screen.blit(self.logo, (0, 0))
             if pygame.mouse.get_pressed()[0]:
                 self.timesettrue = 0
-                self.intro_over = True
+                self.intro_status = 1
 
+        if self.intro_status == 1:
+            self.screen.fill('black')
+            text(0, 380, 100, 'Enter User Name', fontsize=80, fontcolor='white')
+            screen.blit(textinput.surface, (100, 200))
+            self.t0 = self.playtime
 
+        if self.intro_status == 2 and 0 <= self.playtime - self.t0 < 2:
+            self.screen.fill('black')
+        if self.intro_status == 2 and 0 <= self.playtime - self.t0 >= 2:
+            self.intro_status = 3
         pygame.display.update()
 
 
@@ -660,7 +655,10 @@ class Ending:
 
         self.total_time = 0
         for i in levels.values():
-            self.total_time += min(i['scoreboard'])
+            try:
+                self.total_time += min(i['scoreboard']).score
+            except:
+                pass
 
         self.total_death = 0
         for i in levels.values():
@@ -720,11 +718,11 @@ class Ending:
             self.display_surface.blit(self.button.text, self.button.rect)
             self.button_check()
             text3 = self.font3.render(f'death:{self.total_death}', False, 'white')
-            text3_rect = text3.get_rect(midleft=(100,600))
+            text3_rect = text3.get_rect(midleft=(100, 600))
             self.display_surface.blit(text3, text3_rect)
 
             text4 = self.font3.render(f'time:{self.total_time}', False, 'white')
-            text4_rect = text3.get_rect(midright=(screen_width-100,600))
+            text4_rect = text3.get_rect(midright=(screen_width - 100, 600))
             self.display_surface.blit(text4, text4_rect)
 
         self.frame += 1
@@ -978,6 +976,7 @@ class MysteryBlock(MultiImageTile, pygame.sprite.DirtySprite):
 
 # Pygame setup
 pygame.init()
+pygame.mixer.Sound("../music/AnyConv.com__A.wav").play(-1)
 read_scoreboard()
 vertical_tile_number = 20
 tile_size = 32
@@ -988,15 +987,21 @@ clock = pygame.time.Clock()
 game = Game(now_level)
 pygame.display.set_caption('ukkagame')  # 게임 창 이름
 pygame.display.flip()
-input_box = InputBox(100, 100, 140, 32)
+inputfont = pygame.font.Font('../graphics/font/big-shot.ttf', 80)
+pygame.key.set_repeat(200, 25)
+textinput = pygame_textinput.TextInputVisualizer(font_object=inputfont, antialias=False, font_color='white')
+textinput.cursor_color = 'white'
+textinput.cursor_blink_interval = 500
+
 while True:
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         # 게임 닫을 때 세이브데이터 저장하기
         if event.type == pygame.QUIT:
-            for i in range(len(levels)):
-                with open(f'../userscore/scoreboard{i}.txt', 'w') as ff:
-                    for j in sorted(map(int, levels[i]['scoreboard'])):
-                        ff.write(str(j) + '\n')
+            for ii in range(len(levels)):
+                with open(f'../userscore/scoreboard{ii}.txt', 'w') as ff:
+                    for jj in sorted(levels[ii]['scoreboard']):
+                        ff.write(str(jj) + '\n')
             pygame.quit()
             sys.exit()
 
@@ -1013,8 +1018,10 @@ while True:
                 game.status = 'scoreboard'
             if event.key == pygame.K_e and game.status == 'levelselect' and game.unlocked_level >= len(levels):
                 game.status = 'ending'
-
-        input_box.handle_event(event)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and game.intro.intro_status == 1:
+                game.intro.intro_status = 2
+                username = textinput.value
+    textinput.update(events)
 
     screen.fill('skyblue')
     game.run()  # 게임 실행
