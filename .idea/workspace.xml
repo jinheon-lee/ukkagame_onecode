@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="fbf8680e-4ca0-4a29-b426-cda2cc780143" name="변경" comment="스코어보드 관련">
+      <change afterPath="$PROJECT_DIR$/.idea/csv-plugin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/tile/enemy/spike (2) - 복사본.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/tile/enemy/spike (2).png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/tile/enemy/spike.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/levels/0/level_0_map.csv" beforeDir="false" afterPath="$PROJECT_DIR$/levels/0/level_0_map.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/levels/1/level_1_map.csv" beforeDir="false" afterPath="$PROJECT_DIR$/levels/1/level_1_map.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/levels/2/level_2_map.csv" beforeDir="false" afterPath="$PROJECT_DIR$/levels/2/level_2_map.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userscore/scoreboard0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/userscore/scoreboard0.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userscore/scoreboard1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/userscore/scoreboard1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userscore/scoreboard2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/userscore/scoreboard2.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2IJVsQiH0jc3QZat42Z52pdfJMa" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ukkagame_통합" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/code" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/code/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="디폴트 작업">
+      <changelist id="fbf8680e-4ca0-4a29-b426-cda2cc780143" name="변경" comment="" />
+      <created>1669899879410</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1669899879410</updated>
+    </task>
+    <task id="LOCAL-00001" summary="코드 1개로 줄임">
+      <created>1669900756205</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1669900756205</updated>
+    </task>
+    <task id="LOCAL-00002" summary="코드 1개로 줄임">
+      <created>1669900998409</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1669900998409</updated>
+    </task>
+    <task id="LOCAL-00003" summary="스코어보드">
+      <created>1669996743923</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1669996743923</updated>
+    </task>
+    <task id="LOCAL-00004" summary="스코어보드 잔버그 해결">
+      <created>1669997231268</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1669997231268</updated>
+    </task>
+    <task id="LOCAL-00005" summary="스코어보드 관련">
+      <created>1669998938788</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1669998938788</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="코드 1개로 줄임" />
+    <MESSAGE value="스코어보드" />
+    <MESSAGE value="스코어보드 잔버그 해결" />
+    <MESSAGE value="스코어보드 관련" />
+    <option name="LAST_COMMIT_MESSAGE" value="스코어보드 관련" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
