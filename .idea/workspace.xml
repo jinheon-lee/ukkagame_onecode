@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fbf8680e-4ca0-4a29-b426-cda2cc780143" name="변경" comment="스코어보드 관련">
-      <change afterPath="$PROJECT_DIR$/.idea/csv-plugin.xml" afterDir="false" />
+    <list default="true" id="fbf8680e-4ca0-4a29-b426-cda2cc780143" name="변경" comment="레벨 추가 그외 많은거">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/tile/enemy/spike (2) - 복사본.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/tile/enemy/spike (2).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/tile/enemy/spike.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/levels/0/level_0_map.csv" beforeDir="false" afterPath="$PROJECT_DIR$/levels/0/level_0_map.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/levels/1/level_1_map.csv" beforeDir="false" afterPath="$PROJECT_DIR$/levels/1/level_1_map.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/levels/2/level_2_map.csv" beforeDir="false" afterPath="$PROJECT_DIR$/levels/2/level_2_map.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/userscore/scoreboard0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/userscore/scoreboard0.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userscore/scoreboard1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/userscore/scoreboard1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userscore/scoreboard2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/userscore/scoreboard2.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +102,21 @@
       <option name="project" value="LOCAL" />
       <updated>1669998938788</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="레벨 추가 그외 많은거">
+      <created>1670080295889</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1670080295889</updated>
+    </task>
+    <task id="LOCAL-00007" summary="레벨 추가 그외 많은거">
+      <created>1670080367778</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1670080367778</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -129,7 +135,8 @@
     <MESSAGE value="스코어보드" />
     <MESSAGE value="스코어보드 잔버그 해결" />
     <MESSAGE value="스코어보드 관련" />
-    <option name="LAST_COMMIT_MESSAGE" value="스코어보드 관련" />
+    <MESSAGE value="레벨 추가 그외 많은거" />
+    <option name="LAST_COMMIT_MESSAGE" value="레벨 추가 그외 많은거" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
