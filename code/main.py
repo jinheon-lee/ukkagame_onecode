@@ -6,33 +6,46 @@ import time
 
 level_0 = {
     'map': '../levels/0/level_0_map.csv',
-    'pos': (600, 300),
+    'pos': (600, 250),
     'selectimgpath': '../graphics/levelselecter/level_0',
     'unlock': 1,
     'scoreboard': [],
+    'death': 1000000
 }
 level_1 = {
     'map': '../levels/1/level_1_map.csv',
-    'pos': (600, 400),
+    'pos': (600, 350),
     'selectimgpath': '../graphics/levelselecter/level_1',
     'unlock': 2,
     'scoreboard': [],
+    'death': 1000000
 }
 level_2 = {
     'map': '../levels/2/level_2_map.csv',
-    'pos': (600, 500),
+    'pos': (600, 450),
     'selectimgpath': '../graphics/levelselecter/level_2',
     'unlock': 3,
     'scoreboard': [],
+    'death': 1000000
+}
+level_3 = {
+    'map': '../levels/3/level_3_map.csv',
+    'pos': (600, 550),
+    'selectimgpath': '../graphics/levelselecter/level_3',
+    'unlock': 4,
+    'scoreboard': [],
+    'death': 1000000
 }
 
 levels = {
     0: level_0,
     1: level_1,
-    2: level_2
+    2: level_2,
+    3: level_3,
 }
 
 now_level = 0
+
 
 # 텍스트 출력 함수
 def text(arg, x, y, arg2=None, fontsize=20, fontcolor=(0, 0, 0), fontname='../graphics/font/neodgm.ttf'):
@@ -46,11 +59,12 @@ def text(arg, x, y, arg2=None, fontsize=20, fontcolor=(0, 0, 0), fontname='../gr
     textrect.centery = y
     screen.blit(text_, textrect)
 
+
 def scoreboard_(now_level):
     screen.fill('black')
     # 스코어보드 입력
     # 1등 기록 금색
-    text(0, 640, 100, f"LEVEL {now_level+1}", 100, (255, 255, 255))
+    text(0, 640, 100, f"LEVEL {now_level + 1}", 100, (255, 255, 255))
     try:
         text(0, 640, 260, f'1: ' + levels[now_level]['scoreboard'][0].zfill(6), 60, (255, 255, 0))
     except:
@@ -59,18 +73,18 @@ def scoreboard_(now_level):
         try:
             # 2등 기록 은색
             if i == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i+1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
+                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
                      (192, 192, 192))
             # 3등 기록 동색
             elif i == 2:
-                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i+1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
+                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
                      (98, 70, 55))
             # 홀짝성에 따라 좌우 결정
             elif i % 2 == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i+1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
+                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
                      (255, 255, 255))
             else:
-                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i+1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
+                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + levels[now_level]['scoreboard'][i].zfill(6), 40,
                      (255, 255, 255))
         except:
             if i == 1:
@@ -88,6 +102,8 @@ def scoreboard_(now_level):
                 text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(6), 40,
                      (255, 255, 255))
     pygame.display.update()
+
+
 def import_csv_layout(path):
     terrain_map = []
     with open(path) as mapdata:
@@ -139,7 +155,7 @@ def read_scoreboard():
                 for j in lines:
                     try:
                         score = j.strip()
-                        levels[i]['scoreboard'].append(score)
+                        levels[i]['scoreboard'].append(int(score))
 
                     # 스코어보드 파일이 잘못 되었을 경우 초기화
                     except ValueError as err:
@@ -150,6 +166,7 @@ def read_scoreboard():
             with open(f'../userscore/scoreboard{i}.txt', 'w') as f:
                 pass
 
+
 class Level:
     def __init__(self, current_level, surface, create_levelselect, create_level):
         # level setup
@@ -157,7 +174,7 @@ class Level:
         self.display_surface = surface  # 스크린
         level_data = levels[current_level]  # game_data에서 가져온 레벨의 데이터
         self.map_data = import_csv_layout(level_data['map'])  # 지도(2차원 리스트)
-        self.new_max_level = level_data['unlock']  # 이 레벨을 클리어 시 열리는 레벨
+        self.new_unlocked_level = level_data['unlock']  # 이 레벨을 클리어 시 열리는 레벨
 
         self.create_level = create_level  # 레벨 시작 함수(부활시 사용)
         self.create_levelselect = create_levelselect  # 레벨 선택 시작 함수(승리시 사용)
@@ -179,7 +196,7 @@ class Level:
         :param layout:list[list[int]]
         :return:
         """
-        tile_img_dict = import_imagedict('../graphics/tile')  # 이미지를 dict의 형태로 받아옴
+        self.tile_img_dict = import_imagedict('../graphics/tile')  # 이미지를 dict의 형태로 받아옴
         self.tiles = pygame.sprite.Group()  # 바닥 타일 그룹
         self.player = pygame.sprite.GroupSingle()  # 플레이어 싱글 그룹
         self.goal = pygame.sprite.GroupSingle()  # 골인 지점 싱글 그룹
@@ -187,6 +204,7 @@ class Level:
         self.checkpoints = pygame.sprite.Group()  # 체크포인트 그룹
         self.enemys = pygame.sprite.Group()  # 적 그룹
         self.mysteryblocks = pygame.sprite.Group()  # 랜덤박스 그룹
+        self.detectblocks = pygame.sprite.Group()  # 모서리 표시 블럭 그룹
         # 2차원 리스트를 훑으면서 리스트의 값에 따라 그룹에 해당하는 좌표의 타일 추가하기
         for row_index, row in enumerate(layout):
             for col_index, cell in enumerate(row):
@@ -194,46 +212,59 @@ class Level:
                 y = row_index * tile_size
 
                 # 땅
-                if cell == '4':
-                    tile = Tile((x, y), tile_size, tile_img_dict['ground.png'])
+                if cell == '13':
+                    tile = Tile((x, y), tile_size, self.tile_img_dict['ground.png'])
                     self.tiles.add(tile)
 
                 # 땅 위의 잔디
-                if cell == '7':
-                    tile = Tile((x, y), tile_size, tile_img_dict['topground.png'])
+                if cell == '16':
+                    tile = Tile((x, y), tile_size, self.tile_img_dict['topground.png'])
+                    self.tiles.add(tile)
+
+                # 벽돌
+                if cell == '21':
+                    tile = Tile((x, y), tile_size, self.tile_img_dict['block.png'])
                     self.tiles.add(tile)
 
                 # 플레이어 초기시작 위치
-                if cell == '10':
+                if cell == '17':
                     player_sprite = Player((x, y))
                     self.player.add(player_sprite)
                     self.checkpoint = (x, y)
                     self.startx = x
 
                 # 가시
-                if cell == '6':
-                    sprite = Tile((x, y), tile_size, tile_img_dict['spike.png'])
+                if cell == '15':
+                    sprite = Tile((x, y), tile_size, self.tile_img_dict['spike.png'])
                     self.thorns.add(sprite)
 
                 # 골인점
-                if cell == '3':
-                    sprite = Tile((x, y), tile_size, tile_img_dict['goal.png'])
+                if cell == '12':
+                    sprite = Tile((x, y), tile_size, self.tile_img_dict['goal.png'])
                     self.goal.add(sprite)
 
                 # 체크포인트
-                if cell == '0':
-                    sprite = CheckpointTile((x, y), tile_size, tile_img_dict['checkpoint.png'])
+                if cell == '9':
+                    sprite = CheckpointTile((x, y), tile_size, self.tile_img_dict['checkpoint.png'])
                     self.checkpoints.add(sprite)
 
                 # 적
-                if cell == '12':
-                    sprite = Enemy((x, y), tile_size, tile_img_dict['enemy'], -4)
+                if cell == '20':
+                    sprite = Enemy((x, y), tile_size, self.tile_img_dict['enemy'], -2)
                     self.enemys.add(sprite)
 
-                # 랜덤박스(미완성)
-                if cell == '1234':
-                    sprite = Enemy((x, y), tile_size, tile_img_dict['mysterybox'])
-                    self.MysteryBlock.add(sprite)
+                # 랜덤박스
+                if cell == '23':
+                    sprite = MysteryBlock((x, y), tile_size, self.tile_img_dict['mysteryblock'])
+                    self.mysteryblocks.add(sprite)
+                # 히든 박스
+                if cell == '22':
+                    sprite = MysteryBlock((x, y), tile_size, self.tile_img_dict['mysteryblock'], 'hidden')
+                    self.mysteryblocks.add(sprite)
+                # enemy가 방향 바꾸는 블럭
+                if cell == '18':
+                    sprite = Detecttile((x, y), tile_size, self.tile_img_dict['enemy_detect.png'])
+                    self.detectblocks.add(sprite)
 
     def scroll_x(self):
         """화면의 위치에 따라  플레이어를 움직일 것인지 화면을 움직일 것인지 결정"""
@@ -264,11 +295,20 @@ class Level:
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
 
+        for sprite in self.mysteryblocks.sprites():
+            if sprite.status != 'hidden':
+                if sprite.rect.colliderect(player.rect):
+                    if player.direction.x < 0:
+                        player.rect.left = sprite.rect.right
+                    elif player.direction.x > 0:
+                        player.rect.right = sprite.rect.left
+
     def enemy_horizental_update(self):
         """enemy의 좌우이동"""
         for enemy in self.enemys.sprites():
             enemy.rect.x += enemy.direction.x
-            for sprite in self.tiles.sprites():
+
+            for sprite in self.detectblocks.sprites():
                 if sprite.rect.colliderect(enemy.rect):
                     if enemy.direction.x < 0:
                         enemy.rect.left = sprite.rect.right
@@ -305,12 +345,19 @@ class Level:
         # 랜덤 블록(개발중)
         for sprite in self.mysteryblocks.sprites():
             if sprite.rect.colliderect(player.rect):
-                if player.direction.y > 0:
+                if player.direction.y > 0 and sprite.status != 'hidden':
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
                     player.on_ground = True
                 elif player.direction.y < 0:
-                    player.rect.top = sprite.rect.bottom
+                    if sprite.status == 'hidden':
+                        player.rect.top = sprite.rect.bottom
+                        sprite.status = 'hited'
+
+                    else:
+                        player.rect.top = sprite.rect.bottom
+                        sprite.status = 'hited'
+
                     player.direction.y = 0
                     sprite.index = 1
 
@@ -318,11 +365,14 @@ class Level:
         """골인 지점 도달 체크"""
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
             self.time = pygame.time.get_ticks()
-            print("level", self.current_level, "time: ", self.time - self.starttime)
-            print("time:", self.time)
-            print("start_time:", self.starttime)
+            # print("level", self.current_level, "time: ", self.time - self.starttime)
+            # print("time:", self.time)
+            # print("start_time:", self.starttime)
             levels[self.current_level]['scoreboard'].append(self.time - self.starttime)
-            self.create_levelselect(self.new_max_level)
+            if levels[self.current_level]['death'] > self.deathcount:
+                levels[self.current_level]['death'] = self.deathcount
+                # print(levels[self.current_level]['death'])
+            self.create_levelselect(self.new_unlocked_level)
 
     def check_checkpoint(self):
         """체크리스트 갱신"""
@@ -332,10 +382,16 @@ class Level:
 
     def check_die(self):
         """가시, 적으로 죽는 것 체크"""
-        if pygame.sprite.spritecollide(self.player.sprite, self.thorns, False):
+        player = self.player.sprite
+        if pygame.sprite.spritecollide(player, self.thorns, False):
             self.kill_player()
-        if pygame.sprite.spritecollide(self.player.sprite, self.enemys, False):
-            self.kill_player()
+
+        for sprite in pygame.sprite.spritecollide(player, self.enemys, False):
+            if abs(sprite.rect.top - player.rect.bottom) < 5:
+                sprite.kill()
+                player.direction.y = player.jump_speed
+            else:
+                self.kill_player()
 
     def check_fall(self):
         """떨어져 죽는 것 체크"""
@@ -346,7 +402,7 @@ class Level:
         """플레이어 죽이고 레벨 리셋"""
         self.deathcount += 1
         self.alive = False
-        print(self.deathcount)
+        # print(self.deathcount)
         self.create_level(self.current_level, self.checkpoint, self.deathcount)  # 체크포인트 이용해 레벨 재생성
 
     def startscreen(self):
@@ -379,6 +435,8 @@ class Level:
         self.checkpoints.update(world_shift)
         self.thorns.update(world_shift)
         self.enemys.update(world_shift)
+        self.detectblocks.update(world_shift)
+        self.mysteryblocks.update(world_shift)
 
     def run(self):
         """레벨 실행"""
@@ -402,6 +460,7 @@ class Level:
             self.checkpoints.draw(self.display_surface)
             self.player.draw(self.display_surface)
             self.enemys.draw(self.display_surface)
+            self.mysteryblocks.draw(self.display_surface)
         else:
             self.startscreen()
             self.vertical_movement_collision()
@@ -413,7 +472,7 @@ class Game:
     """
 
     def __init__(self, current_level):
-        self.unlocked_level = 1  # 해금된 레벨(0~self.unlocked_level)
+        self.unlocked_level = 0  # 해금된 레벨(0~self.unlocked_level)
         self.levelselect = Levelselect(self.unlocked_level, screen, self.create_level)  # 레벨 선택 클래스
         self.ending = Ending(screen, self.create_levelselect)  # 엔딩 선택 장면
         self.intro = Intro(screen)  # 인트로
@@ -421,6 +480,7 @@ class Game:
         self.deathcount = 0  # 죽은 횟수
         self.starttime = 0  # 레벨 시작
         self.current_level = current_level
+
 
     def run(self):
         """
@@ -467,6 +527,7 @@ class Game:
         self.level.deathcount = self.deathcount
 
     def create_levelselect(self, new_unlocked_level):
+        game.ending.__init__(screen,self.create_levelselect)
         """
         레벨 셀렉트 클래스 만듦
 
@@ -477,7 +538,7 @@ class Game:
         if new_unlocked_level == len(levels):
             self.status = 'ending'
             return
-        # new_max_level이 기존의 max_level다 작으면 새로운 unlocked_level 업데이트
+        # new_max_level이 기존의 unlocked_level다 작으면 새로운 unlocked_level 업데이트
         if new_unlocked_level > self.unlocked_level:
             self.unlocked_level = new_unlocked_level
         self.levelselect = Levelselect(self.unlocked_level, screen, self.create_level)
@@ -520,24 +581,16 @@ class Intro:
         if 0 <= self.playtime - self.t0 < 1:
             self.screen.fill('white')
             self.screen.blit(self.whitescreen, (0, 0))
-        if 3 <= self.playtime - self.t0 < 5:
-            self.screen.fill('white')
-            self.companylogo.set_alpha(255 * (self.playtime - self.t0 - 3) / 2)
-            self.screen.blit(self.companylogo, (0, 0))
-        if 7 <= self.playtime - self.t0 < 9:
-            self.screen.fill('white')
-            self.companylogo.set_alpha(255 * (9 - self.playtime + self.t0) / 2)
-            self.screen.blit(self.companylogo, (0, 0))
 
-        if 10 <= self.playtime - self.t0 < 11:
+        if 1 <= self.playtime - self.t0 < 2:
             self.screen.fill('white')
 
-        if 11 <= self.playtime - self.t0 < 13:
+        if 2 <= self.playtime - self.t0 < 4:
             self.screen.fill('white')
-            self.logo.set_alpha(255 * (self.playtime - self.t0 - 11) / 2)
+            self.logo.set_alpha(255 * (self.playtime - self.t0 - 2) / 2)
             self.screen.blit(self.logo, (0, 0))
 
-        if 13 <= self.playtime - self.t0:
+        if 4 <= self.playtime - self.t0:
             self.screen.blit(self.logo, (0, 0))
             if pygame.mouse.get_pressed()[0]:
                 self.timesettrue = 0
@@ -571,6 +624,14 @@ class Ending:
 
         # 버튼 누를 때 실행하는 함수
         self.create_levelselect = create_levelselect
+
+        self.total_time = 0
+        for i in levels.values():
+            self.total_time += min(i['scoreboard'])
+
+        self.total_death = 0
+        for i in levels.values():
+            self.total_death += i['death']
 
     def button_check(self):
         """버튼 누르는 것 체크"""
@@ -625,6 +686,13 @@ class Ending:
             pygame.mouse.set_visible(True)
             self.display_surface.blit(self.button.text, self.button.rect)
             self.button_check()
+            text3 = self.font3.render(f'death:{self.total_death}', False, 'white')
+            text3_rect = text3.get_rect(midleft=(100,600))
+            self.display_surface.blit(text3, text3_rect)
+
+            text4 = self.font3.render(f'time:{self.total_time}', False, 'white')
+            text4_rect = text3.get_rect(midright=(screen_width-100,600))
+            self.display_surface.blit(text4, text4_rect)
 
         self.frame += 1
 
@@ -734,7 +802,7 @@ class Levelselect:  # 레벨 선택 클래스
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RETURN]:
             self.starttime = pygame.time.get_ticks()
-            print("start:", self.starttime)
+            # print("start:", self.starttime)
             self.create_level(self.selected_level)
             now_level = self.selected_level
             pygame.mouse.set_visible(False)
@@ -757,7 +825,7 @@ class Levelselect:  # 레벨 선택 클래스
                 if pygame.mouse.get_pressed()[0] and i <= self.unlocked_level and self.cnt <= 0:
                     self.starttime = pygame.time.get_ticks()
                     now_level = self.selected_level
-                    print("start:", self.starttime)
+                    # print("start:", self.starttime)
                     pygame.mouse.set_visible(False)
                     self.create_level(i)
                     self.cnt = 10
@@ -770,6 +838,7 @@ class Levelselect:  # 레벨 선택 클래스
         pygame.mouse.set_visible(True)
         self.update()
         self.displaybutton()
+        text(0, screen_width / 2, 110, "UKKA GAME", 120)
 
     # 아래
 
@@ -813,8 +882,8 @@ class CheckpointTile(Tile):
 
 
 class ThornTile(Tile):
-    def __init__(self, pos, size):
-        super().__init__(pos, size, 'blue')
+    def __init__(self, pos, size, img):
+        super().__init__(pos, size, img)
 
 
 class MultiImageTile(Tile):
@@ -829,25 +898,54 @@ class MultiImageTile(Tile):
 
 
 class Enemy(MultiImageTile):
-    def __init__(self, pos, size, imglist, speed, gravity=0):
-        super().__init__(pos, size, imglist)
+    def __init__(self, pos, size, imglist, speed, gravity=0.8):
+        scaledimglist = []
+        for image in imglist:
+            scaledimglist.append(pygame.transform.scale(image, (48, 48)))
+        super().__init__(pos, size, scaledimglist)
         self.direction = pygame.math.Vector2(speed, 0)
-        if self.direction.x < 0:
-            self.index = 1
         self.gravity = gravity
+        self.cnt = 0
 
     def apply_gravity(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
 
+    def update(self, x_shift):
+        super().update(x_shift)
+        self.cnt += 1
+        if self.cnt == 20:
+            self.cnt = 0
+            self.index = 1 - self.index
 
-class MysteryBlock(MultiImageTile):
-    def __init__(self, pos, size, imglist, hidden=False):
-        super().init(pos, size, imglist)
+
+# 적이 모서리까지 온 것 감지
+class Detecttile(Tile):
+    def __init__(self, pos, size, img):
+        super().__init__(pos, size, img)
+
+
+class MysteryBlock(MultiImageTile, pygame.sprite.DirtySprite):
+    def __init__(self, pos, size, imglist, status='init'):
+        super().__init__(pos, size, imglist)
+        self.status = status
+
+    def update(self, x_shift):
+        if self.status == 'init':
+            self.index = 1
+            self.visible = 1
+        elif self.status == 'hited':
+            self.index = 2
+            self.visible = 1
+        if self.status == 'hidden':
+            self.visible = 0
+
+        super().update(x_shift)
 
 
 # Pygame setup
 pygame.init()
+read_scoreboard()
 vertical_tile_number = 20
 tile_size = 32
 screen_height = vertical_tile_number * tile_size
@@ -855,7 +953,6 @@ screen_width = 1200
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 game = Game(now_level)
-read_scoreboard()
 pygame.display.set_caption('ukkagame')  # 게임 창 이름
 pygame.display.flip()
 
@@ -881,8 +978,9 @@ while True:
             if event.key == pygame.K_s and game.status == 'levelselect':
                 scoreboard_(now_level)
                 game.status = 'scoreboard'
-            if event.key == pygame.K_m:
-                game.status = 'levelselect'
+            if event.key == pygame.K_e and game.status == 'levelselect' and game.unlocked_level >= len(levels):
+                game.status = 'ending'
+
     screen.fill('skyblue')
     game.run()  # 게임 실행
 
