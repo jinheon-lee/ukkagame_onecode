@@ -40,8 +40,8 @@ level_3 = {
 levels = {
     0: level_0,
     1: level_1,
-    # 2: level_2,
-    # 3: level_3,
+    2: level_2,
+    3: level_3,
 }
 
 now_level = 0
