@@ -635,6 +635,7 @@ class Intro:
         if 4 <= self.playtime - self.t0:
             self.screen.blit(self.logo, (0, 0))
             if pygame.mouse.get_pressed()[0]:
+                clicksound.play()
                 self.timesettrue = 0
                 self.intro_status = 1
 
@@ -694,6 +695,7 @@ class Ending:
         if self.button.rect.collidepoint(pygame.mouse.get_pos()):
             self.button.text = self.font.render('Return', False, 'green')
             if pygame.mouse.get_pressed()[0]:
+                clicksound.play()
                 self.__init__(self.display_surface, self.create_levelselect)
                 self.create_levelselect(len(levels) - 1)
         if pygame.key.get_pressed()[pygame.K_RETURN]:
@@ -908,6 +910,7 @@ class Levelselect:  # 레벨 선택 클래스
                 if i <= self.unlocked_level:
                     self.selected_level = i
                 if pygame.mouse.get_pressed()[0] and i <= self.unlocked_level and self.cnt <= 0:
+                    clicksound.play()
                     self.starttime = pygame.time.get_ticks()
                     now_level = self.selected_level
                     # print("start:", self.starttime)
@@ -1030,7 +1033,10 @@ class MysteryBlock(MultiImageTile, pygame.sprite.DirtySprite):
 
 # Pygame setup
 pygame.init()
-pygame.mixer.Sound("../music/AnyConv.com__A.wav").play(-1)
+pygame.mixer.pre_init(44100,-16,2,512)
+background_music = pygame.mixer.Sound("../music/AnyConv.com__A.wav")
+background_music.set_volume(0.5)
+background_music.play(-1)
 read_scoreboard()
 vertical_tile_number = 20
 tile_size = 32
@@ -1043,6 +1049,8 @@ pygame.display.set_caption('ukkagame')  # 게임 창 이름
 pygame.display.flip()
 pygame.key.set_repeat(200, 25)
 inputbox = InputBox()
+clicksound = pygame.mixer.Sound("../music/AnyConv.com__rclick-13693.wav")
+clicksound.set_volume(1)
 
 while True:
     events = pygame.event.get()
