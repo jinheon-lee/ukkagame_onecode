@@ -1049,7 +1049,7 @@ pygame.display.set_caption('ukkagame')  # 게임 창 이름
 pygame.display.flip()
 pygame.key.set_repeat(200, 25)
 inputbox = InputBox()
-clicksound = pygame.mixer.Sound("../music/AnyConv.com__rclick-13693.wav")
+clicksound = pygame.mixer.Sound("../music/mixkit-mouse-click-close-1113.wav")
 clicksound.set_volume(1)
 
 while True:
