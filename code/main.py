@@ -1,10 +1,9 @@
 import pygame
 import sys
 import csv
-
 import os
 import time
-import pygame_textinput
+
 
 level_0 = {
     'map': '../levels/0/level_0_map.csv',
