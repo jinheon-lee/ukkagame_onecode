@@ -40,8 +40,8 @@ level_3 = {
 levels = {
     0: level_0,
     1: level_1,
-    2: level_2,
-    3: level_3,
+    # 2: level_2,
+    # 3: level_3,
 }
 
 now_level = 0
@@ -196,7 +196,7 @@ class Score:
         self.score = score
 
     def __lt__(self, other):
-        self.score < other.score
+        return self.score < other.score
 
     def __str__(self):
         return f'{str(self.score).zfill(12)} {self.name}'
@@ -269,58 +269,58 @@ class Level:
 
                 # 땅
                 if cell == '13':
-                    tile = Tile((x, y), tile_size, self.tile_img_dict['ground.png'])
-                    self.tiles.add(tile)
+                    self.tile = Tile((x, y), tile_size, self.tile_img_dict['ground.png'])
+                    self.tiles.add(self.tile)
 
                 # 땅 위의 잔디
                 if cell == '16':
-                    tile = Tile((x, y), tile_size, self.tile_img_dict['topground.png'])
-                    self.tiles.add(tile)
+                    self.tile = Tile((x, y), tile_size, self.tile_img_dict['topground.png'])
+                    self.tiles.add(self.tile)
 
                 # 벽돌
                 if cell == '21':
-                    tile = Tile((x, y), tile_size, self.tile_img_dict['block.png'])
-                    self.tiles.add(tile)
+                    self.tile = Tile((x, y), tile_size, self.tile_img_dict['block.png'])
+                    self.tiles.add(self.tile)
 
                 # 플레이어 초기시작 위치
                 if cell == '17':
-                    player_sprite = Player((x, y))
-                    self.player.add(player_sprite)
+                    self.player_sprite = Player((x, y))
+                    self.player.add(self.player_sprite)
                     self.checkpoint = (x, y)
                     self.startx = x
 
                 # 가시
                 if cell == '15':
-                    sprite = Tile((x, y), tile_size, self.tile_img_dict['spike.png'])
-                    self.thorns.add(sprite)
+                    self.sprite = Tile((x, y), tile_size, self.tile_img_dict['spike.png'])
+                    self.thorns.add(self.sprite)
 
                 # 골인점
                 if cell == '12':
-                    sprite = Tile((x, y), tile_size, self.tile_img_dict['goal.png'])
-                    self.goal.add(sprite)
+                    self.sprite = Tile((x, y), tile_size, self.tile_img_dict['goal.png'])
+                    self.goal.add(self.sprite)
 
                 # 체크포인트
                 if cell == '9':
-                    sprite = CheckpointTile((x, y), tile_size, self.tile_img_dict['checkpoint.png'])
-                    self.checkpoints.add(sprite)
+                    self.sprite = CheckpointTile((x, y), tile_size, self.tile_img_dict['checkpoint.png'])
+                    self.checkpoints.add(self.sprite)
 
                 # 적
                 if cell == '20':
-                    sprite = Enemy((x, y), tile_size, self.tile_img_dict['enemy'], -2)
-                    self.enemys.add(sprite)
+                    self.sprite = Enemy((x, y), tile_size, self.tile_img_dict['enemy'], -2)
+                    self.enemys.add(self.sprite)
 
                 # 랜덤박스
                 if cell == '23':
-                    sprite = MysteryBlock((x, y), tile_size, self.tile_img_dict['mysteryblock'])
-                    self.mysteryblocks.add(sprite)
+                    self.sprite = MysteryBlock((x, y), tile_size, self.tile_img_dict['mysteryblock'])
+                    self.mysteryblocks.add(self.sprite)
                 # 히든 박스
                 if cell == '22':
-                    sprite = MysteryBlock((x, y), tile_size, self.tile_img_dict['mysteryblock'], 'hidden')
-                    self.mysteryblocks.add(sprite)
+                    self.sprite = MysteryBlock((x, y), tile_size, self.tile_img_dict['mysteryblock'], 'hidden')
+                    self.mysteryblocks.add(self.sprite)
                 # enemy가 방향 바꾸는 블럭
                 if cell == '18':
-                    sprite = Detecttile((x, y), tile_size, self.tile_img_dict['enemy_detect.png'])
-                    self.detectblocks.add(sprite)
+                    self.sprite = Detecttile((x, y), tile_size, self.tile_img_dict['enemy_detect.png'])
+                    self.detectblocks.add(self.sprite)
 
     def scroll_x(self):
         """화면의 위치에 따라  플레이어를 움직일 것인지 화면을 움직일 것인지 결정"""
@@ -338,7 +338,7 @@ class Level:
             self.world_shift = 0
             playerx.speed = 8
 
-    def horizental_movement_collision(self):
+    def player_horizental_update(self):
         """플레이어의 좌우이동과 충돌 판정"""
         player = self.player.sprite
         player.rect.x += player.direction.x * player.speed
@@ -383,7 +383,7 @@ class Level:
                         enemy.rect.bottom = sprite.rect.top
                         enemy.direction.y = 0
 
-    def vertical_movement_collision(self):
+    def player_vertical_update(self):
         """플레이어의 상하 이동과 충돌 판정"""
         player = self.player.sprite
         player.apply_gravity()
@@ -505,7 +505,7 @@ class Level:
             self.scroll_x()
             self.player.sprite.update()
             self.updatetile(self.world_shift)
-            self.horizental_movement_collision()
+            self.player_horizental_update()
             self.enemy_horizental_update()
             self.enemy_vertical_update()
 
@@ -513,7 +513,7 @@ class Level:
             self.check_die()
             self.check_fall()
             self.check_win()
-            self.vertical_movement_collision()
+            self.player_vertical_update()
 
             self.goal.draw(self.display_surface)
             self.tiles.draw(self.display_surface)
@@ -524,7 +524,7 @@ class Level:
             self.mysteryblocks.draw(self.display_surface)
         else:
             self.startscreen()
-            self.vertical_movement_collision()
+            self.player_vertical_update()
 
 
 class Game:
