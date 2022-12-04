@@ -48,6 +48,31 @@ levels = {
 
 now_level = 0
 
+class InputBox:
+    def __init__(self):
+        self.rect = pygame.Rect((100,200),(600,400))
+        self.color = 'white'
+        self.text = ''
+        self.font = pygame.font.Font('../graphics/font/big-shot.ttf', 80)
+        print(self.text)
+        self.txt_surface = self.font.render(self.text, False, (255,255,255))
+
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                print(self.text)
+                self.text = ''
+            elif event.key == pygame.K_BACKSPACE:
+                self.text = self.text[:-1]
+            else:
+                self.text += event.unicode
+            self.txt_surface = self.font.render(self.text, True, self.color)
+
+
+    def draw(self, screen):
+        # Blit the text.
+        screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
+
 
 # 텍스트 출력 함수
 def text(arg, x, y, arg2=None, fontsize=20, fontcolor=(0, 0, 0), fontname='../graphics/font/neodgm.ttf'):
@@ -128,6 +153,7 @@ def import_imagelist(path):
             if image[-4:] == '.png':
                 full_path = path + '/' + image
                 image = pygame.image.load(full_path).convert_alpha()
+                image = pygame.transform.scale(image,(300,90))
                 imglist.append(image)
 
     return imglist
@@ -616,8 +642,8 @@ class Intro:
 
         if self.intro_status == 1:
             self.screen.fill('black')
-            text(0, 380, 100, 'Enter User Name', fontsize=80, fontcolor='white')
-            screen.blit(textinput.surface, (100, 200))
+            text(0, 390, 120, 'Enter User Name', fontsize=80, fontcolor='white')
+            inputbox.draw(self.screen)
             self.t0 = self.playtime
 
         if self.intro_status == 2 and 0 <= self.playtime - self.t0 < 2:
@@ -987,11 +1013,8 @@ clock = pygame.time.Clock()
 game = Game(now_level)
 pygame.display.set_caption('ukkagame')  # 게임 창 이름
 pygame.display.flip()
-inputfont = pygame.font.Font('../graphics/font/big-shot.ttf', 80)
 pygame.key.set_repeat(200, 25)
-textinput = pygame_textinput.TextInputVisualizer(font_object=inputfont, antialias=False, font_color='white')
-textinput.cursor_color = 'white'
-textinput.cursor_blink_interval = 500
+inputbox = InputBox()
 
 while True:
     events = pygame.event.get()
@@ -1018,10 +1041,10 @@ while True:
                 game.status = 'scoreboard'
             if event.key == pygame.K_e and game.status == 'levelselect' and game.unlocked_level >= len(levels):
                 game.status = 'ending'
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and game.intro.intro_status == 1:
+            if event.key == pygame.K_RETURN and game.intro.intro_status == 1:
                 game.intro.intro_status = 2
-                username = textinput.value
-    textinput.update(events)
+                username = inputbox.text
+        inputbox.handle_event(event)
 
     screen.fill('skyblue')
     game.run()  # 게임 실행
