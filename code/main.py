@@ -85,52 +85,64 @@ def text(arg, x, y, arg2=None, fontsize=20, fontcolor=(0, 0, 0), fontname='../gr
     screen.blit(text_, textrect)
 
 
+def text_left(arg, x, y, arg2=None, fontsize=20, fontcolor=(0, 0, 0), fontname='../graphics/font/neodgm.ttf'):
+    font = pygame.font.Font(fontname, fontsize)
+    if not arg2:
+        text_ = font.render("Score: " + str(int(arg)).zfill(12), True, fontcolor)
+    else:
+        text_ = font.render(arg2, True, fontcolor)
+    textrect = text_.get_rect()
+    textrect.x = x
+    textrect.centery = y
+    screen.blit(text_, textrect)
+
+
 def scoreboard_(now_level):
     screen.fill('black')
     # 스코어보드 입력
     # 1등 기록 금색
     text(0, 640, 100, f"LEVEL {now_level + 1}", 100, (255, 255, 255))
     try:
-        text(0, 640, 260, f'1: ' + str(levels[now_level]['scoreboard'][0]).zfill(12), 60, (255, 255, 0))
+        text_left(0, 350, 260, f'1: ' + str(levels[now_level]['scoreboard'][0]).zfill(12), 60, (255, 255, 0))
 
     except:
-        text(0, 640, 260, '1: ' + "0".zfill(12), 60, (255, 255, 0))
+        text_left(0, 350, 260, '1: ' + "0".zfill(12), 60, (255, 255, 0))
 
     for i in range(1, 9):
         try:
             # 2등 기록 은색
             if i == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(12),
+                text_left(0, 240, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(10),
                      40,
                      (192, 192, 192))
             # 3등 기록 동색
             elif i == 2:
-                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(12),
+                text_left(0, 700, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(10),
                      40,
                      (98, 70, 55))
             # 홀짝성에 따라 좌우 결정
             elif i % 2 == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(12),
+                text_left(0, 240, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(10),
                      40,
                      (255, 255, 255))
             else:
-                text(0, 880, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(12),
+                text_left(0, 700, 260 + (i + 1) // 2 * 80, f'{i + 1}: ' + str(levels[now_level]['scoreboard'][i]).zfill(10),
                      40,
                      (255, 255, 255))
         except:
             if i == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(12), 40,
+                text_left(0, 240, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(10), 40,
                      (192, 192, 192))
             # 3등 기록 동색
             elif i == 2:
-                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(12), 40,
+                text_left(0, 700, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(10), 40,
                      (98, 70, 55))
             # 홀짝성에 따라 좌우 결정
             elif i % 2 == 1:
-                text(0, 400, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(12), 40,
+                text_left(0, 240, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(10), 40,
                      (255, 255, 255))
             else:
-                text(0, 880, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(12), 40,
+                text_left(0, 700, 260 + (i + 1) // 2 * 80, str(i + 1) + ': ' + "0".zfill(10), 40,
                      (255, 255, 255))
     pygame.display.update()
 
@@ -198,7 +210,7 @@ def read_scoreboard():
                 lines = f.readlines()
                 for j in lines:
                     try:
-                        name, score = j.strip().split()
+                        score,name = j.strip().split()
                         levels[i]['scoreboard'].append(Score(name, int(score)))
 
                     # 스코어보드 파일이 잘못 되었을 경우 초기화
@@ -386,7 +398,7 @@ class Level:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
 
-        # 랜덤 블록(개발중)
+        # 랜덤 블록
         for sprite in self.mysteryblocks.sprites():
             if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0 and sprite.status != 'hidden':
@@ -394,9 +406,11 @@ class Level:
                     player.direction.y = 0
                     player.on_ground = True
                 elif player.direction.y < 0:
+                    coinsound.play()
                     if sprite.status == 'hidden':
                         player.rect.top = sprite.rect.bottom
                         sprite.status = 'hited'
+
 
                     else:
                         player.rect.top = sprite.rect.bottom
@@ -429,6 +443,7 @@ class Level:
         player = self.player.sprite
         if pygame.sprite.spritecollide(player, self.thorns, False):
             self.kill_player()
+            hitsound.play()
 
         for sprite in pygame.sprite.spritecollide(player, self.enemys, False):
             if abs(sprite.rect.top - player.rect.bottom) < 5:
@@ -436,11 +451,13 @@ class Level:
                 player.direction.y = player.jump_speed
             else:
                 self.kill_player()
+                hitsound.play()
 
     def check_fall(self):
         """떨어져 죽는 것 체크"""
         if self.player.sprite.check_death():
             self.kill_player()
+            fallingsound.play()
 
     def kill_player(self):
         """플레이어 죽이고 레벨 리셋"""
@@ -641,7 +658,7 @@ class Intro:
 
         if self.intro_status == 1:
             self.screen.fill('black')
-            text(0, 390, 120, 'Enter User Name', fontsize=80, fontcolor='white')
+            text_left(0, 100, 120, 'Enter User Name', fontsize=80, fontcolor='white')
             inputbox.draw(self.screen)
             self.t0 = self.playtime
 
@@ -1051,6 +1068,9 @@ pygame.key.set_repeat(200, 25)
 inputbox = InputBox()
 clicksound = pygame.mixer.Sound("../music/mixkit-mouse-click-close-1113.wav")
 clicksound.set_volume(1)
+coinsound = pygame.mixer.Sound("../music/smb_coin.wav")
+hitsound = pygame.mixer.Sound("../music/minecraft_hit.mp3")
+fallingsound = pygame.mixer.Sound("../music/minecraft_hit.mp3")
 
 while True:
     events = pygame.event.get()
