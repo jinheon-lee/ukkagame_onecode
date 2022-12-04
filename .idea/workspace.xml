@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fbf8680e-4ca0-4a29-b426-cda2cc780143" name="변경" comment="스코어보드 닉네임 추가">
+    <list default="true" id="fbf8680e-4ca0-4a29-b426-cda2cc780143" name="변경" comment="텍스트 입력 임포트 없이">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_0/Level_0_locked.png" beforeDir="false" afterPath="$PROJECT_DIR$/graphics/levelselecter/level_0/Level_0_locked.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_0/Level_0_unselected.png" beforeDir="false" afterPath="$PROJECT_DIR$/graphics/levelselecter/level_0/Level_0_unselected.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_0/level_0_selected.png" beforeDir="false" afterPath="$PROJECT_DIR$/graphics/levelselecter/level_0/level_0_selected.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_1/Level_1_locked.png" beforeDir="false" afterPath="$PROJECT_DIR$/graphics/levelselecter/level_1/Level_1_locked.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_1/Level_1_selected.png" beforeDir="false" afterPath="$PROJECT_DIR$/graphics/levelselecter/level_1/Level_1_selected.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_1/Level_1_unselected.png" beforeDir="false" afterPath="$PROJECT_DIR$/graphics/levelselecter/level_1/Level_1_unselected.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_2/Level_1_locked.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_2/Level_1_selected.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_2/Level_1_unselected.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_3/Level_1_locked.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_3/Level_1_selected.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/levelselecter/level_3/Level_1_unselected.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/tile/checkpoint.png" beforeDir="false" afterPath="$PROJECT_DIR$/graphics/tile/checkpoint.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/tile/goal.png" beforeDir="false" afterPath="$PROJECT_DIR$/graphics/tile/goal.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +132,21 @@
       <option name="project" value="LOCAL" />
       <updated>1670090955746</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="텍스트 입력 임포트 없이">
+      <created>1670151927497</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1670151927497</updated>
+    </task>
+    <task id="LOCAL-00011" summary="텍스트 입력 임포트 없이">
+      <created>1670152150530</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1670152150530</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -164,7 +168,8 @@
     <MESSAGE value="레벨 추가 그외 많은거" />
     <MESSAGE value="스코어보드 버그" />
     <MESSAGE value="스코어보드 닉네임 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="스코어보드 닉네임 추가" />
+    <MESSAGE value="텍스트 입력 임포트 없이" />
+    <option name="LAST_COMMIT_MESSAGE" value="텍스트 입력 임포트 없이" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

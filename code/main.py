@@ -4,7 +4,6 @@ import csv
 import os
 import time
 
-
 level_0 = {
     'map': '../levels/0/level_0_map.csv',
     'pos': (600, 250),
@@ -41,20 +40,21 @@ level_3 = {
 levels = {
     0: level_0,
     1: level_1,
-    2: level_2,
-    3: level_3,
+    # 2: level_2,
+    # 3: level_3,
 }
 
 now_level = 0
 
+
 class InputBox:
     def __init__(self):
-        self.rect = pygame.Rect((100,200),(600,400))
+        self.rect = pygame.Rect((100, 200), (600, 400))
         self.color = 'white'
         self.text = ''
         self.font = pygame.font.Font('../graphics/font/big-shot.ttf', 80)
         print(self.text)
-        self.txt_surface = self.font.render(self.text, False, (255,255,255))
+        self.txt_surface = self.font.render(self.text, False, (255, 255, 255))
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -67,10 +67,9 @@ class InputBox:
                 self.text += event.unicode
             self.txt_surface = self.font.render(self.text, True, self.color)
 
-
     def draw(self, screen):
         # Blit the text.
-        screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
+        screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y + 5))
 
 
 # 텍스트 출력 함수
@@ -152,7 +151,7 @@ def import_imagelist(path):
             if image[-4:] == '.png':
                 full_path = path + '/' + image
                 image = pygame.image.load(full_path).convert_alpha()
-                image = pygame.transform.scale(image,(300,90))
+                image = pygame.transform.scale(image, (300, 90))
                 imglist.append(image)
 
     return imglist
@@ -453,7 +452,7 @@ class Level:
     def startscreen(self):
         """부활 시에 보이는 화면"""
         if self.counter >= 0:
-            self.display_surface.fill('black')
+            self.display_surface.fill((10,10,10))
         elif self.counter <= 0:
             self.alive = True
 
@@ -462,7 +461,7 @@ class Level:
         text2_rect = text2.get_rect(center=(screen_width / 2, screen_height / 2 - 50))  # 텍스트 중앙정렬용 직사각형
         a = self.player.sprite.image.get_rect()  # 플레이어 이미지 가져오기
         a.topright = (screen_width / 2 - 30, screen_height - 285)  # 플레이어 이미지 배치
-        self.display_surface.blit(self.player.sprite.image, a)
+        self.display_surface.blit(self.player.sprite.showimage, a)
         self.display_surface.blit(text1, (screen_width / 2 - 10, screen_height - 300))
         self.display_surface.blit(text2, text2_rect)
 
@@ -767,14 +766,24 @@ class EndButton(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
-        self.image = pygame.Surface((32, 64))  # 플레이어 이미지
-        self.image.fill('red')
+        self.imagelist = import_imagedict("../graphics/charcater")
+        self.walkimage = []
+        self.walkimage.append(pygame.transform.scale(self.imagelist['maincharacterwalking1.png'], (32, 64)))
+        self.walkimage.append(pygame.transform.scale(self.imagelist['maincharacterwalking2.png'], (32, 64)))
+        self.jumpimage = pygame.transform.scale(self.imagelist['maincharacterjumping.png'], (32, 64))
+        self.standimage = pygame.transform.scale(self.imagelist['maincharacterstanding.png'], (32, 64))
+        self.image = self.standimage
+        self.showimage = pygame.transform.scale(self.imagelist['maincharactershow.png'], (40, 64))
         self.rect = self.image.get_rect(topleft=pos)  # 플레이어 직사각형
         self.direction = pygame.math.Vector2(0, 0)  # 플레이어 방향벡터(x는 x축 방향설정, y는 y축 속력)
         self.speed = 8  # 플레이어 x방향 속력
         self.gravity = 0.8  # 플레이어에 적용되는 중력
         self.jump_speed = -16  # 플렝이어 점프 시 바뀌는 y방향 속도
         self.on_ground = True  # 땅에 있는지 여부
+        self.walk_index = 0
+        self.animation_index = 0
+        self.face_right = True
+
 
     def get_input(self):
         """키 입력받아서 방향벡터 수정"""
@@ -782,8 +791,13 @@ class Player(pygame.sprite.Sprite):
 
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.direction.x = 1
+            self.face_right = True
+            self.animation_index += 1
+
         elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.direction.x = -1
+            self.face_right = False
+            self.animation_index += 1
         else:
             self.direction.x = 0
 
@@ -801,10 +815,15 @@ class Player(pygame.sprite.Sprite):
         if self.on_ground:
             self.direction.y = self.jump_speed
             self.on_ground = False
+            if self.face_right:
+                self.image = self.standimage
+            else:
+                self.image = pygame.transform.flip(self.standimage,True,False)
 
     def update(self):
         """인풋 받음 """
         self.get_input()
+        self.animate()
 
     def check_death(self):
         if self.rect.y > screen_height:
@@ -812,6 +831,16 @@ class Player(pygame.sprite.Sprite):
         else:
             return False
 
+    def animate(self):
+        if self.face_right and self.on_ground:
+            self.image = self.walkimage[self.walk_index]
+        elif not self.face_right and self.on_ground:
+            self.image = pygame.transform.flip(self.walkimage[self.walk_index],True,False)
+
+
+        if self.animation_index >= 6:
+            self.walk_index = 1-self.walk_index
+            self.animation_index = 0
 
 class Levelselect:  # 레벨 선택 클래스
     def __init__(self, unlocked_level, surface, create_level):
